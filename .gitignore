@@ -1,0 +1,17 @@
+node_modules/
+dist/
+coverage/
+.pnpm-store/
+.agents/
+Captura de tela 2026-07-15 204652.png
+Lista de Materiais - Documento Modelo 20260305.xlsx
+scripts/importarMateriais.mjs
+src/data/materiaisImportados.ts
+src/data/materiaisComplementares.ts
+*.log
+.DS_Store
+.env
+.env.local
+.env.*
+!.env.example
+*.tsbuildinfo

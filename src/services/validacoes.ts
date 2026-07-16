@@ -1,0 +1,81 @@
+import { calcularMateriaisAutomaticos } from '../rules/regrasMateriais'
+import type { DadosSolicitacao, ResultadoValidacao } from '../types'
+
+export const validarSolicitacao = (dados: DadosSolicitacao): ResultadoValidacao => {
+  const erros: string[] = []
+  const avisos: string[] = []
+
+  if (!dados.equipeRetirada.trim()) erros.push('Informe a equipe que irá retirar o material.')
+  if (!dados.dataRetirada) erros.push('Informe a data prevista para retirada.')
+  if (!dados.protocoloOs.trim()) erros.push('Informe o número da obra, OS ou protocolo.')
+
+  if (dados.tipoServico === 'rompimento') {
+    if (!dados.modoRompimento) erros.push('Escolha se o rompimento será atendido com cabo ou com kit.')
+    if (dados.modoRompimento === 'kit' && dados.kits.length === 0) {
+      erros.push('Selecione pelo menos um kit para o rompimento.')
+    }
+    if (dados.modoRompimento === 'cabo' && dados.cabos.length === 0) {
+      erros.push('Adicione pelo menos um cabo para o rompimento.')
+    }
+  }
+
+  const usaPostes =
+    dados.tipoServico === 'troca-poste' ||
+    dados.tipoServico === 'equipagem-poste' ||
+    (dados.tipoServico === 'rompimento' && dados.modoRompimento === 'cabo')
+
+  if (usaPostes) {
+    for (const cabo of dados.cabos) {
+      if (!Number.isFinite(cabo.metragem) || cabo.metragem <= 0) {
+        erros.push(`Informe uma metragem maior que zero para o cabo de ${cabo.capacidade} fibras.`)
+      }
+    }
+
+    const totalPostesClassificados = dados.quantidadePostesAngulo + dados.quantidadePostesCto
+    if (dados.quantidadePostes > 0 && totalPostesClassificados > dados.quantidadePostes) {
+      erros.push('Postes com curva e postes com CTO não podem superar o total de postes a equipar.')
+    }
+    if (dados.quantidadePostesComDrop > dados.quantidadePostes) {
+      erros.push('A quantidade de postes com drop de cliente não pode ser maior que o total de postes a equipar.')
+    }
+    if (dados.quantidadePostesComDrop > 0 && dados.quantidadePostes === 0) {
+      erros.push('Informe o total de postes antes de indicar postes com drop de cliente.')
+    }
+  }
+
+  if (dados.tipoServico === 'caixa-danificada') {
+    if (!dados.tipoCaixa) erros.push('Selecione o tipo da caixa danificada.')
+    if (dados.trocarCaixaCompleta === null) erros.push('Informe se a troca será da caixa completa.')
+    if (dados.quantidadeCaixas <= 0) erros.push('A quantidade de caixas deve ser maior que zero.')
+    if (dados.trocarCaixaCompleta === false && dados.trocarSomenteSplitter === null) {
+      erros.push('Informe se será realizada apenas a troca do splitter.')
+    }
+    if (dados.trocarSomenteSplitter === true && !dados.splittagem) {
+      erros.push('Selecione a splittagem do splitter a substituir.')
+    }
+  }
+
+  if (dados.tipoServico === 'avulsa') {
+    if (!dados.tipoCaixaAvulsa) erros.push('Selecione CEO ou CTO para a solicitação avulsa.')
+    if (dados.quantidadeCaixasAvulsas <= 0) erros.push('A quantidade de caixas deve ser maior que zero.')
+    if (
+      dados.tipoCaixaAvulsa === 'cto' &&
+      dados.quantidadeSplitter1x8 <= 0 &&
+      dados.quantidadeSplitter1x16 <= 0
+    ) {
+      erros.push('Informe a quantidade de pelo menos um splitter para a CTO.')
+    }
+  }
+
+  const itensAutomaticos = calcularMateriaisAutomaticos(dados)
+  if (itensAutomaticos.length === 0) {
+    erros.push('Informe as condições da solicitação para gerar pelo menos um material automaticamente.')
+  }
+
+  const pendentes = itensAutomaticos.filter((item) => item.pendenteCadastro || !item.codigo)
+  if (pendentes.length > 0) {
+    avisos.push(`${pendentes.length} item(ns) será(ão) gerado(s) como PENDENTE DE CADASTRO.`)
+  }
+
+  return { erros, avisos }
+}

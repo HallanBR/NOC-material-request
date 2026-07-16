@@ -1,0 +1,44 @@
+import type { Material, Unidade } from '../types'
+
+type RegistroPublico = readonly [codigo: string, nome: string, unidade: Unidade]
+
+// Catálogo mínimo indispensável ao funcionamento da aplicação. Não contém preços,
+// centros de custo, fornecedores nem referências ao arquivo corporativo de origem.
+const registros: RegistroPublico[] = [
+  ['207', 'FITA BAP', 'und'],
+  ['243', 'SUPORTE BAP', 'und'],
+  ['206', 'PARAFUSO M2', 'und'],
+  ['813', 'SUPORTE REX', 'und'],
+  ['815', 'ISOLADOR', 'und'],
+  ['424', 'OLHAL', 'und'],
+  ['1057', 'ALÇA PREFORMADA AMARRAÇÃO FINAL CABO CCE 6,80 A 7,40 MM BRANCO - CABO DE 06 E 12', 'm'],
+  ['831', 'ALÇA PREFORMADA PARA CORDOALHA DE ACO- 3/16 -4,8MM - VERMELHO - CORDOALHA', 'm'],
+  ['2057', 'CORDOALHA (METROS)', 'm'],
+  ['1543', 'SUPORTE OPT LOOP (UNID.)', 'und'],
+  ['1544', 'KIT TAP BRACKET', 'und'],
+  ['219', 'SUPORTE DIELÉTRICO', 'und'],
+  ['802', 'ANEL GUIA AGF', 'und'],
+  ['133', 'FITA FUSIMEC (PADRÃO 1,25 METROS)', 'und'],
+  ['551', 'FECHO P/ FITA FUSIMEC', 'und'],
+  ['688', 'CRUZETA', 'und'],
+  ['1698', 'CABO CFOA-SM-ASU-80-S 06 FIBRAS', 'm'],
+  ['50', 'CABO CFOA-SM-AS80-S 12FO', 'm'],
+  ['51', 'CABO CFOA-SM-AS80-S 24F NR', 'm'],
+  ['66', 'CABO CFOA-SM-AS-80-S 36 FIBRAS', 'm'],
+  ['86', 'CABO CFOA-SM-AS-80-S 72 FIBRAS', 'm'],
+  ['1725', 'CABO ÓPTICO CFOA-SM-AS80-S 144F', 'm'],
+  ['103', 'CEO CAIXA EMENDA OPT 72F DUAL SVM 6.5-12', 'und'],
+  ['2258', 'MINI DIO CDOI-AS8-S0108 (50)', 'und'],
+  ['1066', 'CTO', 'und'],
+  ['1758', 'SPLITTER 1X8 DESCONECTORIZADO', 'und'],
+  ['204', 'SPLITTER 1X16 DESCONECTORIZADO', 'und'],
+]
+
+export const materiaisPublicos: Material[] = registros.map(([codigo, nome, unidade]) => ({
+  id: `operacional-${codigo}`,
+  nome,
+  codigo,
+  categoria: 'OPERACIONAL',
+  unidade,
+  pendenteCadastro: false,
+}))
