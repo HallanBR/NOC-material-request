@@ -32,8 +32,8 @@ describe('regras de materiais', () => {
     const dados = criarDadosIniciais()
     dados.modoRompimento = 'cabo'
     dados.cabos = [
-      { id: 'trecho-a', capacidade: 6, metragem: 250 },
-      { id: 'trecho-b', capacidade: 6, metragem: 180 },
+      { id: 'trecho-a', capacidade: 6, metragem: 250, quantidadeAlcasPlaquetas: 0 },
+      { id: 'trecho-b', capacidade: 6, metragem: 180, quantidadeAlcasPlaquetas: 0 },
     ]
 
     const itens = calcularMateriaisAutomaticos(dados).filter((item) => item.codigo === '1698')
@@ -89,28 +89,28 @@ describe('regras de materiais', () => {
     expect(itens.find((item) => item.codigo === '802')?.quantidade).toBe(2)
   })
 
-  it('inclui alças e plaquetas por linha de cabo em todos os postes', () => {
+  it('respeita a quantidade informada de alças e plaquetas por linha de cabo', () => {
     const dados = criarDadosIniciais()
     dados.tipoServico = 'equipagem-poste'
     dados.quantidadePostes = 3
     dados.quantidadePostesAngulo = 1
     dados.cabos = [
-      { id: 'cabo-6', capacidade: 6, metragem: 100 },
-      { id: 'cabo-12', capacidade: 12, metragem: 100 },
-      { id: 'cabo-24', capacidade: 24, metragem: 100 },
-      { id: 'cabo-36', capacidade: 36, metragem: 100 },
-      { id: 'cabo-72', capacidade: 72, metragem: 100 },
-      { id: 'cabo-144', capacidade: 144, metragem: 100 },
+      { id: 'cabo-6', capacidade: 6, metragem: 100, quantidadeAlcasPlaquetas: 5 },
+      { id: 'cabo-12', capacidade: 12, metragem: 100, quantidadeAlcasPlaquetas: 4 },
+      { id: 'cabo-24', capacidade: 24, metragem: 100, quantidadeAlcasPlaquetas: 3 },
+      { id: 'cabo-36', capacidade: 36, metragem: 100, quantidadeAlcasPlaquetas: 2 },
+      { id: 'cabo-72', capacidade: 72, metragem: 100, quantidadeAlcasPlaquetas: 1 },
+      { id: 'cabo-144', capacidade: 144, metragem: 100, quantidadeAlcasPlaquetas: 6 },
     ]
 
     const itens = calcularMateriaisAutomaticos(dados)
     const quantidades = (codigo: string) => itens.filter((item) => item.codigo === codigo).map((item) => item.quantidade)
 
-    expect(quantidades('1057')).toEqual([6, 6])
-    expect(quantidades('1763')).toEqual([6, 6])
-    expect(quantidades('67')).toEqual([6])
+    expect(quantidades('1057')).toEqual([5, 4])
+    expect(quantidades('1763')).toEqual([3, 2])
+    expect(quantidades('67')).toEqual([1])
     expect(quantidades('1720')).toEqual([6])
-    expect(quantidades('184')).toEqual([6, 6, 6, 6, 6, 6])
+    expect(quantidades('184')).toEqual([5, 4, 3, 2, 1, 6])
     expect(itens.filter((item) => ['1057', '1763', '67', '1720'].includes(item.codigo ?? '')).every((item) => item.unidade === 'und')).toBe(true)
   })
 

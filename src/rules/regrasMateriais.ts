@@ -121,42 +121,36 @@ export const regrasMateriais: RegraMaterial[] = [
   {
     id: 'RG-ALCA-POR-CABO',
     nome: 'Alças conforme o cabo selecionado',
-    descricao: 'Inclui duas alças por poste, usando o código correspondente a cada linha de cabo.',
+    descricao: 'Inclui a quantidade informada de alças, usando o código correspondente a cada linha de cabo.',
     condicao: (dados) =>
       servicoUsaPostes(dados) &&
-      dados.cabos.length > 0 &&
-      dados.quantidadePostes > 0,
-    acao: (dados) => {
-      const quantidadePorCabo = 2 * dados.quantidadePostes
-      return dados.cabos.flatMap((cabo) =>
+      dados.cabos.some((cabo) => cabo.quantidadeAlcasPlaquetas > 0),
+    acao: (dados) =>
+      dados.cabos.flatMap((cabo) =>
         criarItem(
           materialPorCodigo(capacidadeParaCodigoAlca[cabo.capacidade]),
-          quantidadePorCabo,
+          cabo.quantidadeAlcasPlaquetas,
           `RG-ALCA-POR-CABO-${cabo.id}`,
           'und',
         ),
-      )
-    },
+      ),
   },
   {
     id: 'RG-PLAQUETA-POR-CABO',
     nome: 'Plaquetas conforme o cabo selecionado',
-    descricao: 'Inclui duas plaquetas de identificação amarela por poste para cada linha de cabo.',
+    descricao: 'Inclui a quantidade informada de plaquetas de identificação amarela por linha de cabo.',
     condicao: (dados) =>
       servicoUsaPostes(dados) &&
-      dados.cabos.length > 0 &&
-      dados.quantidadePostes > 0,
-    acao: (dados) => {
-      const quantidadePorCabo = 2 * dados.quantidadePostes
-      return dados.cabos.flatMap((cabo) =>
+      dados.cabos.some((cabo) => cabo.quantidadeAlcasPlaquetas > 0),
+    acao: (dados) =>
+      dados.cabos.flatMap((cabo) =>
         criarItem(
           materialPorCodigo('184'),
-          quantidadePorCabo,
+          cabo.quantidadeAlcasPlaquetas,
           `RG-PLAQUETA-POR-CABO-${cabo.id}`,
           'und',
         ),
-      )
-    },
+      ),
   },
   {
     id: 'RG-CTO-PREDIAL-SPLITTER-BOX',

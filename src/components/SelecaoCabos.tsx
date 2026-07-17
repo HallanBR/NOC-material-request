@@ -8,13 +8,15 @@ type SelecaoCabosProps = {
   titulo?: string
 }
 
-const criarLinhaCabo = (): CaboSolicitado => ({
+const criarLinhaCabo = (quantidadeAlcasPlaquetas: number): CaboSolicitado => ({
   id: `cabo-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
   capacidade: 6,
   metragem: 0,
+  quantidadeAlcasPlaquetas,
 })
 
 export function SelecaoCabos({ dados, aoAlterar, titulo = 'Cabos a solicitar' }: SelecaoCabosProps) {
+  const recomendacaoAcessorios = dados.quantidadePostes * 2
   const alterarCabo = (id: string, alteracoes: Partial<CaboSolicitado>) => {
     aoAlterar({
       cabos: dados.cabos.map((cabo) => (cabo.id === id ? { ...cabo, ...alteracoes } : cabo)),
@@ -30,7 +32,7 @@ export function SelecaoCabos({ dados, aoAlterar, titulo = 'Cabos a solicitar' }:
             <span aria-hidden="true">⚠</span>
           </summary>
           <p>
-            Atenção: serão incluídas 2 alças e 2 plaquetas por poste para cada linha de cabo, conforme a fibra escolhida.
+            Recomendação: para {dados.quantidadePostes} poste(s), informe {recomendacaoAcessorios} alças e {recomendacaoAcessorios} plaquetas em cada linha de cabo. Você pode ajustar essa quantidade conforme necessário.
           </p>
         </details>
       </div>
@@ -60,6 +62,16 @@ export function SelecaoCabos({ dados, aoAlterar, titulo = 'Cabos a solicitar' }:
                 onChange={(event) => alterarCabo(cabo.id, { metragem: Number(event.target.value) })}
               />
             </label>
+            <label>
+              <span>Qtd. de alças e plaquetas (cada)</span>
+              <input
+                min="0"
+                step="1"
+                type="number"
+                value={cabo.quantidadeAlcasPlaquetas || ''}
+                onChange={(event) => alterarCabo(cabo.id, { quantidadeAlcasPlaquetas: Number(event.target.value) })}
+              />
+            </label>
             <button
               className="botao-link perigo"
               onClick={() => aoAlterar({ cabos: dados.cabos.filter((item) => item.id !== cabo.id) })}
@@ -72,7 +84,7 @@ export function SelecaoCabos({ dados, aoAlterar, titulo = 'Cabos a solicitar' }:
       </div>
       <button
         className="botao botao-secundario botao-adicionar-cabo"
-        onClick={() => aoAlterar({ cabos: [...dados.cabos, criarLinhaCabo()] })}
+        onClick={() => aoAlterar({ cabos: [...dados.cabos, criarLinhaCabo(recomendacaoAcessorios)] })}
         type="button"
       >
         Adicionar outro cabo

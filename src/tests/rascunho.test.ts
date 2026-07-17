@@ -43,4 +43,17 @@ describe('migração do rascunho', () => {
 
     expect(rascunho?.dados.kits).toEqual([24, 72])
   })
+
+  it('atribui a recomendação de alças e plaquetas aos cabos de rascunhos antigos', () => {
+    localStorage.setItem(CHAVE_RASCUNHO, JSON.stringify({
+      dados: {
+        quantidadePostes: 3,
+        cabos: [{ id: 'cabo-legado', capacidade: 24, metragem: 100 }],
+      },
+    }))
+
+    const rascunho = carregarRascunho()
+
+    expect(rascunho?.dados.cabos[0]?.quantidadeAlcasPlaquetas).toBe(6)
+  })
 })

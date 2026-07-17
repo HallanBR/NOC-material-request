@@ -8,7 +8,7 @@ const dadosValidos = () => ({
   os: 'OS-12345',
   protocolo: 'PROTO-67890',
   modoRompimento: 'cabo' as const,
-  cabos: [{ id: 'trecho-1', capacidade: 6 as const, metragem: 100 }],
+  cabos: [{ id: 'trecho-1', capacidade: 6 as const, metragem: 100, quantidadeAlcasPlaquetas: 0 }],
 })
 
 describe('validação da solicitação', () => {
@@ -38,6 +38,20 @@ describe('validação da solicitação', () => {
     const resultado = validarSolicitacao(dados)
 
     expect(resultado.erros).toContain('A quantidade de postes com drop de cliente não pode ser maior que o total de postes a equipar.')
+  })
+
+  it('não permite curvas ou CTOs acima do total de postes', () => {
+    const dados = dadosValidos()
+    dados.quantidadePostes = 2
+    dados.quantidadePostesAngulo = 3
+    dados.quantidadePostesCto = 3
+
+    const resultado = validarSolicitacao(dados)
+
+    expect(resultado.erros).toEqual(expect.arrayContaining([
+      'A quantidade de postes com curva não pode ser maior que o total de postes a equipar.',
+      'A quantidade de postes com CTO não pode ser maior que o total de postes a equipar.',
+    ]))
   })
 
   it('permite gerar um rompimento com os dados mínimos', () => {

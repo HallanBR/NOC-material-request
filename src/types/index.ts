@@ -36,6 +36,7 @@ export type CaboSolicitado = {
   id: string
   capacidade: CapacidadeFibra
   metragem: number
+  quantidadeAlcasPlaquetas: number
 }
 
 export type DadosSolicitacao = {
