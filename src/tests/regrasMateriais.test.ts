@@ -52,28 +52,45 @@ describe('regras de materiais', () => {
     expect(itens.find((item) => item.codigo === '2294')).toMatchObject({ quantidade: 1, unidade: 'kit', pendenteCadastro: false })
   })
 
-  it('não duplica a ferragem de poste quando há drop de cliente', () => {
+  it('calcula a ferragem base pelo total de postes a equipar', () => {
     const dados = criarDadosIniciais()
     dados.tipoServico = 'equipagem-poste'
     dados.quantidadePostes = 12
-    dados.quantidadePostesComDrop = 2
 
     const itens = calcularMateriaisAutomaticos(dados)
 
     expect(itens.find((item) => item.codigo === '802')?.quantidade).toBe(24)
     expect(itens.find((item) => item.codigo === '133')).toBeUndefined()
   })
-  it('calcula dois anéis por poste, mesmo com curvas, CTOs e drops', () => {
+  it('calcula dois anéis por poste, mesmo com curvas e CTOs', () => {
     const dados = criarDadosIniciais()
     dados.tipoServico = 'equipagem-poste'
     dados.quantidadePostes = 12
     dados.quantidadePostesAngulo = 3
     dados.quantidadePostesCto = 1
-    dados.quantidadePostesComDrop = 12
 
     const itens = calcularMateriaisAutomaticos(dados)
 
     expect(itens.find((item) => item.codigo === '802')?.quantidade).toBe(24)
+  })
+
+  it('não duplica materiais comuns quando o mesmo poste tem curva e CTO', () => {
+    const dados = criarDadosIniciais()
+    dados.tipoServico = 'equipagem-poste'
+    dados.quantidadePostes = 1
+    dados.quantidadePostesAngulo = 1
+    dados.quantidadePostesCto = 1
+
+    const itens = calcularMateriaisAutomaticos(dados)
+
+    expect(itens.find((item) => item.codigo === '207')?.quantidade).toBe(1)
+    expect(itens.find((item) => item.codigo === '243')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '206')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '424')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '802')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '133')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '551')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '688')?.quantidade).toBe(1)
   })
 
   it('aplica um parafuso, um olhal e dois anéis por poste com curva', () => {

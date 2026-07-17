@@ -52,7 +52,6 @@ export type DadosSolicitacao = {
   quantidadeRaquetes: number
   quantidadePostesAngulo: number
   quantidadePostesCto: number
-  quantidadePostesComDrop: number
   tipoCaixa: TipoCaixa | ''
   trocarCaixaCompleta: boolean | null
   trocarSomenteSplitter: boolean | null

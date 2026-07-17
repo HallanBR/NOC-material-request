@@ -28,6 +28,7 @@ const composicoes: Record<'raquete' | 'reto' | 'angulo' | 'cto', Composicao[]> =
 const capacidadeParaCodigo: Record<CapacidadeFibra, string> = { 6: '1698', 12: '50', 24: '51', 36: '66', 72: '86', 144: '1725' }
 const capacidadeParaCodigoAlca: Record<CapacidadeFibra, string> = { 6: '1057', 12: '1057', 24: '1763', 36: '1763', 72: '67', 144: '1720' }
 const capacidadeParaCodigoKit: Record<CapacidadeKit, string> = { 24: '2292', 36: '2293', 72: '2294', 144: '2295' }
+const limitePorPosteParaMateriaisComuns: Record<string, number> = { '207': 1, '243': 2, '206': 2, '424': 2, '802': 2 }
 
 export const quantidadePostesRetos = (dados: DadosSolicitacao) =>
   Math.max(0, dados.quantidadePostes - dados.quantidadePostesAngulo - dados.quantidadePostesCto)
@@ -354,5 +355,16 @@ export const calcularMateriaisAutomaticos = (dados: DadosSolicitacao): ItemSolic
       agrupados.set(chave, { ...item })
     }
   }
-  return [...agrupados.values()]
+  return [...agrupados.values()].map((item) => {
+    if (!item.codigo || !limitePorPosteParaMateriaisComuns[item.codigo]) return item
+
+    const quantidadeDaRaquete = (composicoes.raquete.find((material) => material.codigo === item.codigo)?.quantidade ?? 0) * dados.quantidadeRaquetes
+    const limiteDosPostes = limitePorPosteParaMateriaisComuns[item.codigo] * dados.quantidadePostes
+    const quantidadeDosPostes = Math.max(0, item.quantidade - quantidadeDaRaquete)
+
+    return {
+      ...item,
+      quantidade: quantidadeDaRaquete + Math.min(quantidadeDosPostes, limiteDosPostes),
+    }
+  })
 }

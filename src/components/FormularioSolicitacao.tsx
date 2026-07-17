@@ -154,7 +154,15 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
           <p className="texto-ajuda">Informe o total a equipar e a divisão entre curvas e CTOs. Os demais são tratados como postes retos.</p>
           <div className="grade-formulario grade-postes-logica">
             <label>
-              <span>Total de postes a equipar</span>
+              <div className="rotulo-campo-com-aviso">
+                <span>Total de postes a equipar</span>
+                <details className="aviso-postes">
+                  <summary aria-label="Informação sobre materiais para drops de clientes">
+                    <span aria-hidden="true">⚠</span>
+                  </summary>
+                  <p>A quantidade informada já considera os materiais necessários para a equipagem de drops de clientes em cada poste.</p>
+                </details>
+              </div>
               <input min="0" type="number" value={dados.quantidadePostes || ''} onChange={(event) => aoAlterar({ quantidadePostes: Number(event.target.value) })} />
             </label>
             <label>
@@ -168,10 +176,6 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
             <label>
               <span>Quantidade de raquetes</span>
               <input min="0" type="number" value={dados.quantidadeRaquetes} onChange={(event) => aoAlterar({ quantidadeRaquetes: Number(event.target.value) })} />
-            </label>
-            <label>
-              <span>Postes com drop de cliente</span>
-              <input min="0" type="number" value={dados.quantidadePostesComDrop || ''} onChange={(event) => aoAlterar({ quantidadePostesComDrop: Number(event.target.value) })} />
             </label>
           </div>
           <p className="resumo-postes">Postes retos calculados: <strong>{postesRetos}</strong></p>

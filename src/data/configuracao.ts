@@ -16,7 +16,6 @@ export const criarDadosIniciais = (): DadosSolicitacao => {
     quantidadeRaquetes: 0,
     quantidadePostesAngulo: 0,
     quantidadePostesCto: 0,
-    quantidadePostesComDrop: 0,
     tipoCaixa: '',
     trocarCaixaCompleta: null,
     trocarSomenteSplitter: null,

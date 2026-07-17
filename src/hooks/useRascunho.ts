@@ -10,6 +10,7 @@ type DadosLegados = Partial<DadosSolicitacao> & {
   protocoloOs?: string
   quantidadeSplitter1x8?: number
   quantidadeSplitter1x16?: number
+  quantidadePostesComDrop?: number
 }
 type CaboLegado = Omit<CaboSolicitado, 'quantidadeAlcasPlaquetas'> & {
   quantidadeAlcasPlaquetas?: number
@@ -27,6 +28,7 @@ export const carregarRascunho = (): Rascunho | null => {
       protocoloOs,
       quantidadeSplitter1x8: _quantidadeSplitter1x8,
       quantidadeSplitter1x16: _quantidadeSplitter1x16,
+      quantidadePostesComDrop: _quantidadePostesComDrop,
       ...dadosAtuais
     } = rascunho.dados
     return {

@@ -32,21 +32,11 @@ export const validarSolicitacao = (dados: DadosSolicitacao): ResultadoValidacao 
       }
     }
 
-    const totalPostesClassificados = dados.quantidadePostesAngulo + dados.quantidadePostesCto
     if (dados.quantidadePostesAngulo > dados.quantidadePostes) {
       erros.push('A quantidade de postes com curva não pode ser maior que o total de postes a equipar.')
     }
     if (dados.quantidadePostesCto > dados.quantidadePostes) {
       erros.push('A quantidade de postes com CTO não pode ser maior que o total de postes a equipar.')
-    }
-    if (dados.quantidadePostes > 0 && totalPostesClassificados > dados.quantidadePostes) {
-      erros.push('Postes com curva e postes com CTO não podem superar o total de postes a equipar.')
-    }
-    if (dados.quantidadePostesComDrop > dados.quantidadePostes) {
-      erros.push('A quantidade de postes com drop de cliente não pode ser maior que o total de postes a equipar.')
-    }
-    if (dados.quantidadePostesComDrop > 0 && dados.quantidadePostes === 0) {
-      erros.push('Informe o total de postes antes de indicar postes com drop de cliente.')
     }
   }
 

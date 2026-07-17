@@ -31,15 +31,6 @@ describe('validação da solicitação', () => {
     expect(resultado.erros).toContain('Informe uma metragem maior que zero para o cabo de 6 fibras.')
   })
 
-  it('não permite drops acima do total de postes', () => {
-    const dados = dadosValidos()
-    dados.quantidadePostes = 12
-    dados.quantidadePostesComDrop = 13
-    const resultado = validarSolicitacao(dados)
-
-    expect(resultado.erros).toContain('A quantidade de postes com drop de cliente não pode ser maior que o total de postes a equipar.')
-  })
-
   it('não permite curvas ou CTOs acima do total de postes', () => {
     const dados = dadosValidos()
     dados.quantidadePostes = 2
@@ -52,6 +43,15 @@ describe('validação da solicitação', () => {
       'A quantidade de postes com curva não pode ser maior que o total de postes a equipar.',
       'A quantidade de postes com CTO não pode ser maior que o total de postes a equipar.',
     ]))
+  })
+
+  it('permite que um mesmo poste tenha curva e CTO', () => {
+    const dados = dadosValidos()
+    dados.quantidadePostes = 1
+    dados.quantidadePostesAngulo = 1
+    dados.quantidadePostesCto = 1
+
+    expect(validarSolicitacao(dados).erros).toEqual([])
   })
 
   it('permite gerar um rompimento com os dados mínimos', () => {
