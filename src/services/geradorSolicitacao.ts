@@ -11,14 +11,6 @@ const formatarData = (data: string) => {
 const formatarQuantidade = (quantidade: number) =>
   new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(quantidade)
 
-const rotuloServico: Record<DadosSolicitacao['tipoServico'], string> = {
-  rompimento: 'Rompimento',
-  'troca-poste': 'Troca de poste',
-  'equipagem-poste': 'Equipagem de novo poste',
-  'caixa-danificada': 'Caixa danificada',
-  avulsa: 'Solicitação avulsa',
-}
-
 export const gerarAssunto = (dados: DadosSolicitacao) =>
   `Solicitação de materiais - OS ${dados.os.trim() || 'Não informada'} - Protocolo ${dados.protocolo.trim() || 'Não informado'}`
 
@@ -42,7 +34,6 @@ export const gerarSolicitacao = (dados: DadosSolicitacao, itens: ItemSolicitacao
     `Protocolo: ${dados.protocolo}`,
     `Retirada por: ${dados.equipeRetirada}`,
     `Data prevista para retirada: ${formatarData(dados.dataRetirada)}`,
-    `Tipo de serviço: ${rotuloServico[dados.tipoServico]}`,
     '',
     'Lista de materiais:',
     '',
@@ -50,7 +41,6 @@ export const gerarSolicitacao = (dados: DadosSolicitacao, itens: ItemSolicitacao
     '',
     ...linhasPendencias,
     'Atenciosamente,',
-    'NOC',
   ].join('\n')
 
   return { assunto: gerarAssunto(dados), corpo, pendencias }

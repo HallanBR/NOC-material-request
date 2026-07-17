@@ -32,7 +32,9 @@ describe('geração do e-mail e TXT', () => {
     expect(solicitacao.corpo).toContain('Retirada por: ATELECOM')
     expect(solicitacao.corpo).toContain('1698 - CABO CFOA-SM-ASU-80-S 06 FIBRAS - 250 m')
     expect(solicitacao.corpo).not.toContain('[Regra:')
-    expect(solicitacao.corpo).toContain('Atenciosamente,\nNOC')
+    expect(solicitacao.corpo).not.toContain('Tipo de serviço:')
+    expect(solicitacao.corpo).not.toContain('NOC')
+    expect(solicitacao.corpo).toMatch(/Atenciosamente,$/)
   })
 
   it('prepara um TXT com nome seguro para download', () => {
