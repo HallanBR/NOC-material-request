@@ -20,9 +20,8 @@ export function ListaMateriais({ itens }: ListaMateriaisProps) {
             <li className="linha-material" key={item.id}>
               <div className="identificacao-material">
                 <strong>{item.nome}</strong>
-                <span>Código: {item.codigo ?? 'PENDENTE DE CADASTRO'} · {item.categoria}</span>
+                <span>Código: {item.codigo ?? 'PENDENTE DE CADASTRO'}</span>
                 {item.pendenteCadastro && <span className="selo selo-pendente">Cadastro pendente</span>}
-                <span className="regra-automatica">Adicionado automaticamente pela regra: {item.regras.join(', ')}</span>
               </div>
               <div className="quantidade-material"><strong>{item.quantidade} {item.unidade}</strong></div>
             </li>

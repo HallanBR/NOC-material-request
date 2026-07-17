@@ -30,7 +30,7 @@ describe('geração do e-mail e TXT', () => {
     expect(solicitacao.corpo).toContain('OS: OS-12345')
     expect(solicitacao.corpo).toContain('Protocolo: 113626180184543141')
     expect(solicitacao.corpo).toContain('Retirada por: ATELECOM')
-    expect(solicitacao.corpo).toContain('1698 - CABO CFOA-SM-ASU-80-S 06 FIBRAS - 250 m')
+    expect(solicitacao.corpo).toContain('1698 - CABO CFOA-SM-AS80 06FO NR - 250 m')
     expect(solicitacao.corpo).not.toContain('[Regra:')
     expect(solicitacao.corpo).not.toContain('Tipo de serviço:')
     expect(solicitacao.corpo).not.toContain('NOC')

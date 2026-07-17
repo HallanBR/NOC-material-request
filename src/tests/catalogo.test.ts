@@ -10,12 +10,12 @@ describe('catálogo operacional público', () => {
   })
 
   it('oferece as seis capacidades de cabo necessárias à solicitação', () => {
-    expect(materialPorCodigo('1698')?.unidade).toBe('m')
-    expect(materialPorCodigo('50')?.unidade).toBe('m')
-    expect(materialPorCodigo('51')?.unidade).toBe('m')
-    expect(materialPorCodigo('66')?.unidade).toBe('m')
-    expect(materialPorCodigo('86')?.unidade).toBe('m')
-    expect(materialPorCodigo('1725')?.unidade).toBe('m')
+    expect(materialPorCodigo('1698')).toMatchObject({ nome: 'CABO CFOA-SM-AS80 06FO NR', unidade: 'm' })
+    expect(materialPorCodigo('50')).toMatchObject({ nome: 'CABO CFOA-SM-AS80-S 12FO', unidade: 'm' })
+    expect(materialPorCodigo('51')).toMatchObject({ nome: 'CABO CFOA-SM-AS80-S 24FO', unidade: 'm' })
+    expect(materialPorCodigo('66')).toMatchObject({ nome: 'CABO CFOA-SM-AS80-S 36FO', unidade: 'm' })
+    expect(materialPorCodigo('86')).toMatchObject({ nome: 'CABO CFOA-SM-AS-80-S 72FO', unidade: 'm' })
+    expect(materialPorCodigo('1725')).toMatchObject({ nome: 'CABO CFOA-SM-AS80-S 144FO', unidade: 'm' })
   })
 
   it('oferece os materiais corretos para CTO de prédio', () => {
