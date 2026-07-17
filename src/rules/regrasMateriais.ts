@@ -121,18 +121,38 @@ export const regrasMateriais: RegraMaterial[] = [
   {
     id: 'RG-ALCA-POR-CABO',
     nome: 'Alças conforme o cabo selecionado',
-    descricao: 'Inclui duas alças por poste com curva ou CTO, usando o código correspondente a cada linha de cabo.',
+    descricao: 'Inclui duas alças por poste, usando o código correspondente a cada linha de cabo.',
     condicao: (dados) =>
       servicoUsaPostes(dados) &&
       dados.cabos.length > 0 &&
-      dados.quantidadePostesAngulo + dados.quantidadePostesCto > 0,
+      dados.quantidadePostes > 0,
     acao: (dados) => {
-      const quantidadePorCabo = 2 * (dados.quantidadePostesAngulo + dados.quantidadePostesCto)
+      const quantidadePorCabo = 2 * dados.quantidadePostes
       return dados.cabos.flatMap((cabo) =>
         criarItem(
           materialPorCodigo(capacidadeParaCodigoAlca[cabo.capacidade]),
           quantidadePorCabo,
           `RG-ALCA-POR-CABO-${cabo.id}`,
+          'und',
+        ),
+      )
+    },
+  },
+  {
+    id: 'RG-PLAQUETA-POR-CABO',
+    nome: 'Plaquetas conforme o cabo selecionado',
+    descricao: 'Inclui duas plaquetas de identificação amarela por poste para cada linha de cabo.',
+    condicao: (dados) =>
+      servicoUsaPostes(dados) &&
+      dados.cabos.length > 0 &&
+      dados.quantidadePostes > 0,
+    acao: (dados) => {
+      const quantidadePorCabo = 2 * dados.quantidadePostes
+      return dados.cabos.flatMap((cabo) =>
+        criarItem(
+          materialPorCodigo('184'),
+          quantidadePorCabo,
+          `RG-PLAQUETA-POR-CABO-${cabo.id}`,
           'und',
         ),
       )
@@ -329,7 +349,8 @@ export const calcularMateriaisAutomaticos = (dados: DadosSolicitacao): ItemSolic
   for (const item of itens) {
     const preservarLinha =
       item.regras[0].startsWith('RG-CABO-AFETADO-') ||
-      item.regras[0].startsWith('RG-ALCA-POR-CABO-')
+      item.regras[0].startsWith('RG-ALCA-POR-CABO-') ||
+      item.regras[0].startsWith('RG-PLAQUETA-POR-CABO-')
     const chave = preservarLinha ? item.id : item.materialId
     const existente = agrupados.get(chave)
     if (existente) {

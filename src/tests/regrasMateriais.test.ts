@@ -89,10 +89,10 @@ describe('regras de materiais', () => {
     expect(itens.find((item) => item.codigo === '802')?.quantidade).toBe(2)
   })
 
-  it('escolhe a alça correta por linha de cabo e preserva capacidades repetidas', () => {
+  it('inclui alças e plaquetas por linha de cabo em todos os postes', () => {
     const dados = criarDadosIniciais()
     dados.tipoServico = 'equipagem-poste'
-    dados.quantidadePostes = 1
+    dados.quantidadePostes = 3
     dados.quantidadePostesAngulo = 1
     dados.cabos = [
       { id: 'cabo-6', capacidade: 6, metragem: 100 },
@@ -106,10 +106,11 @@ describe('regras de materiais', () => {
     const itens = calcularMateriaisAutomaticos(dados)
     const quantidades = (codigo: string) => itens.filter((item) => item.codigo === codigo).map((item) => item.quantidade)
 
-    expect(quantidades('1057')).toEqual([2, 2])
-    expect(quantidades('1763')).toEqual([2, 2])
-    expect(quantidades('67')).toEqual([2])
-    expect(quantidades('1720')).toEqual([2])
+    expect(quantidades('1057')).toEqual([6, 6])
+    expect(quantidades('1763')).toEqual([6, 6])
+    expect(quantidades('67')).toEqual([6])
+    expect(quantidades('1720')).toEqual([6])
+    expect(quantidades('184')).toEqual([6, 6, 6, 6, 6, 6])
     expect(itens.filter((item) => ['1057', '1763', '67', '1720'].includes(item.codigo ?? '')).every((item) => item.unidade === 'und')).toBe(true)
   })
 

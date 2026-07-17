@@ -21,6 +21,7 @@ const registros: RegistroPublico[] = [
   ['1544', 'KIT TAP BRACKET', 'und'],
   ['219', 'SUPORTE DIELÉTRICO', 'und'],
   ['802', 'ANEL GUIA AGF', 'und'],
+  ['184', 'PLAQUETA DE IDENTIFICACAO AMARELA', 'und'],
   ['133', 'FITA FUSIMEC (PADRÃO 1,25 METROS)', 'und'],
   ['551', 'FECHO P/ FITA FUSIMEC', 'und'],
   ['688', 'CRUZETA', 'und'],

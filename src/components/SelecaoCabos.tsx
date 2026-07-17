@@ -15,7 +15,6 @@ const criarLinhaCabo = (): CaboSolicitado => ({
 })
 
 export function SelecaoCabos({ dados, aoAlterar, titulo = 'Cabos a solicitar' }: SelecaoCabosProps) {
-  const postesComAlca = dados.quantidadePostesAngulo + dados.quantidadePostesCto
   const alterarCabo = (id: string, alteracoes: Partial<CaboSolicitado>) => {
     aoAlterar({
       cabos: dados.cabos.map((cabo) => (cabo.id === id ? { ...cabo, ...alteracoes } : cabo)),
@@ -24,16 +23,16 @@ export function SelecaoCabos({ dados, aoAlterar, titulo = 'Cabos a solicitar' }:
 
   return (
     <div className="subsecao-formulario">
-      <div>
+      <div className="cabecalho-cabos">
         <h3>{titulo}</h3>
-        <p className="texto-ajuda">
-          Cada linha representa um cabo. Você pode repetir a mesma fibra quantas vezes forem necessárias.
-        </p>
-        {postesComAlca > 0 && (
-          <p className="texto-ajuda destaque-pendente">
-            Atenção: serão incluídas 2 alças por poste com curva ou CTO para cada linha de cabo, conforme a fibra escolhida.
+        <details className="aviso-alcas">
+          <summary aria-label="Informações sobre alças e plaquetas">
+            <span aria-hidden="true">⚠</span>
+          </summary>
+          <p>
+            Atenção: serão incluídas 2 alças e 2 plaquetas por poste para cada linha de cabo, conforme a fibra escolhida.
           </p>
-        )}
+        </details>
       </div>
       <div className="lista-cabos">
         {dados.cabos.map((cabo, indice) => (

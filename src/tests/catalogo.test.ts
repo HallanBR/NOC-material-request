@@ -28,6 +28,7 @@ describe('catálogo operacional público', () => {
     expect(materialPorCodigo('67')).toMatchObject({ nome: 'ALÇA PREF. 12,4 - 13,3MM - LARANJA CURTA - 72FO', unidade: 'und' })
     expect(materialPorCodigo('1720')).toMatchObject({ nome: 'ALÇA PREF. CABO OPTICO 15 A 16 - MARROM LONGA - 144FO', unidade: 'und' })
     expect(materialPorCodigo('831')?.unidade).toBe('und')
+    expect(materialPorCodigo('184')).toMatchObject({ nome: 'PLAQUETA DE IDENTIFICACAO AMARELA', unidade: 'und' })
   })
 
   it('oferece apenas os kits de rompimento cadastrados', () => {
