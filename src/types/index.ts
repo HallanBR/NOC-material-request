@@ -26,6 +26,8 @@ export type TipoServico =
 
 export type CapacidadeFibra = 6 | 12 | 24 | 36 | 72 | 144
 
+export type CapacidadeKit = 24 | 36 | 72 | 144
+
 export type TipoCaixa = 'cto-predial' | 'cto-poste' | 'ceo'
 
 export type ModoRompimento = 'cabo' | 'kit' | ''
@@ -43,7 +45,7 @@ export type DadosSolicitacao = {
   protocolo: string
   tipoServico: TipoServico
   modoRompimento: ModoRompimento
-  kits: CapacidadeFibra[]
+  kits: CapacidadeKit[]
   cabos: CaboSolicitado[]
   quantidadePostes: number
   quantidadeRaquetes: number

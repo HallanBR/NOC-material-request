@@ -33,4 +33,14 @@ describe('migração do rascunho', () => {
     expect(rascunho?.dados).not.toHaveProperty('quantidadeSplitter1x8')
     expect(rascunho?.dados).not.toHaveProperty('quantidadeSplitter1x16')
   })
+
+  it('remove kits de 6 e 12 fibras que deixaram de existir', () => {
+    localStorage.setItem(CHAVE_RASCUNHO, JSON.stringify({
+      dados: { kits: [6, 12, 24, 72] },
+    }))
+
+    const rascunho = carregarRascunho()
+
+    expect(rascunho?.dados.kits).toEqual([24, 72])
+  })
 })

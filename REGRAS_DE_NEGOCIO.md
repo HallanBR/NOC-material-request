@@ -6,10 +6,11 @@ As regras estão centralizadas em `src/rules/regrasMateriais.ts`. Cada uma possu
 | --- | --- | --- |
 | `RG-POSTE-RAQUETE` | Quantidade de raquetes maior que zero. | Multiplica a composição de raquete da aba `Lista de Ferragem`. |
 | `RG-POSTE-RETO` | Há total de postes após descontar curvas e CTOs. | Calcula postes retos como `total - curvas - CTOs` e aplica a ferragem correspondente. |
-| `RG-POSTE-ANGULO` | Há postes com curva. | Aplica a composição de ângulo. |
+| `RG-POSTE-ANGULO` | Há postes com curva. | Aplica um parafuso M2, um olhal e dois anéis guia por poste, além das demais ferragens. |
 | `RG-POSTE-CTO` | Há postes com CTO. | Aplica a composição de CTO. |
 | `RG-CABO-AFETADO` | Há uma linha de cabo com metragem maior que zero. | Adiciona cada linha de cabo de 6/12/24/36/72/144 fibras separadamente, mesmo quando a fibra se repete. |
-| `RG-KIT-PENDENTE` | A inclusão de kit foi marcada. | Inclui o kit selecionado como `PENDENTE DE CADASTRO`. |
+| `RG-KIT-ROMPIMENTO` | A inclusão de kit foi marcada. | Inclui o kit cadastrado de 24, 36, 72 ou 144 fibras. |
+| `RG-ALCA-POR-CABO` | Há postes com curva ou CTO e cabos selecionados. | Inclui duas alças por poste para cada linha de cabo, de acordo com a capacidade escolhida. |
 | `RG-CAIXA-COMPLETA` | CTO de poste ou CEO danificada com troca completa confirmada. | Inclui CTO de poste ou CEO conforme o tipo escolhido. |
 | `RG-SPLITTER` | Troca apenas do splitter e splittagem informada. | Inclui splitter 1x8 ou 1x16. |
 | `RG-CTO-POSTE-ADESIVO-INTERNO` / `EXTERNO` | Há troca completa de CTO de poste. | Inclui um adesivo interno e um externo por CTO. |
@@ -27,7 +28,9 @@ As regras estão centralizadas em `src/rules/regrasMateriais.ts`. Cada uma possu
 
 - Equipe de retirada, data prevista, OS e protocolo são obrigatórios.
 - Rompimento exige uma escolha exclusiva entre cabo ou kit.
+- Kits de 6 e 12 fibras não são oferecidos. Os kits disponíveis são 24, 36, 72 e 144 fibras.
 - Cada linha de cabo requer metragem maior que zero.
+- A capacidade de cada linha de cabo define o modelo de alça aplicado aos postes com curva ou CTO; linhas repetidas permanecem separadas.
 - Curvas e CTOs não podem superar o total de postes; a quantidade de postes com drop também não pode superá-lo. O drop é uma característica do poste, não uma segunda composição que se soma às ferragens dele.
 - CTO de prédio exige quantidade e escolha entre splitter box 1x8 ou 1x16, sem perguntas de troca completa ou troca apenas do splitter.
 - Na solicitação avulsa, CTO de prédio e CTO de poste são opções diferentes. A CTO de poste com 1x8 usa o código 1066, que já inclui um splitter. A opção com dois splitters 1x8 acrescenta um código 1575 por CTO. A opção 1x16 usa o gabinete desmontado 700 mais um splitter 713 por CTO.

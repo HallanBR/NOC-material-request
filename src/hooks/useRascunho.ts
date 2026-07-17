@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import { criarDadosIniciais } from '../data/configuracao'
-import type { DadosSolicitacao } from '../types'
+import type { CapacidadeKit, DadosSolicitacao } from '../types'
 
 const CHAVE_RASCUNHO = 'noc-solicitacao-materiais-rascunho-v2'
+const capacidadesKitsAtuais: CapacidadeKit[] = [24, 36, 72, 144]
 
 export type Rascunho = { dados: DadosSolicitacao }
 type DadosLegados = Partial<DadosSolicitacao> & {
@@ -31,6 +32,9 @@ export const carregarRascunho = (): Rascunho | null => {
         ...dadosAtuais,
         os: dadosAtuais.os ?? protocoloOs ?? '',
         protocolo: dadosAtuais.protocolo ?? '',
+        kits: (dadosAtuais.kits ?? []).filter((capacidade): capacidade is CapacidadeKit =>
+          capacidadesKitsAtuais.includes(capacidade as CapacidadeKit),
+        ),
         configuracaoCtoPosteAvulsa: dadosAtuais.configuracaoCtoPosteAvulsa ??
           (dadosAtuais.tipoCaixaAvulsa === 'cto-poste' ? '1x8' : ''),
       } as DadosSolicitacao,

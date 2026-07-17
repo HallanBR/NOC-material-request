@@ -41,14 +41,15 @@ describe('regras de materiais', () => {
     expect(itens.map((item) => item.quantidade)).toEqual([250, 180])
   })
 
-  it('mantém kits como pendentes quando o código não existe na fonte', () => {
+  it('inclui os kits cadastrados de 24, 36, 72 e 144 fibras', () => {
     const dados = criarDadosIniciais()
     dados.modoRompimento = 'kit'
-    dados.kits = [6]
+    dados.kits = [24, 72]
 
-    const kit = calcularMateriaisAutomaticos(dados).find((item) => item.materialId === 'kit-6-pendente')
+    const itens = calcularMateriaisAutomaticos(dados)
 
-    expect(kit).toMatchObject({ codigo: null, pendenteCadastro: true, quantidade: 1, unidade: 'kit' })
+    expect(itens.find((item) => item.codigo === '2292')).toMatchObject({ quantidade: 1, unidade: 'kit', pendenteCadastro: false })
+    expect(itens.find((item) => item.codigo === '2294')).toMatchObject({ quantidade: 1, unidade: 'kit', pendenteCadastro: false })
   })
 
   it('não duplica a ferragem de poste quando há drop de cliente', () => {
@@ -62,7 +63,7 @@ describe('regras de materiais', () => {
     expect(itens.find((item) => item.codigo === '802')?.quantidade).toBe(24)
     expect(itens.find((item) => item.codigo === '133')).toBeUndefined()
   })
-  it('calcula 32 aneis para 12 postes, sendo 3 curvas e 1 CTO, mesmo com drop nos 12', () => {
+  it('calcula dois anéis por poste, mesmo com curvas, CTOs e drops', () => {
     const dados = criarDadosIniciais()
     dados.tipoServico = 'equipagem-poste'
     dados.quantidadePostes = 12
@@ -72,7 +73,44 @@ describe('regras de materiais', () => {
 
     const itens = calcularMateriaisAutomaticos(dados)
 
-    expect(itens.find((item) => item.codigo === '802')?.quantidade).toBe(32)
+    expect(itens.find((item) => item.codigo === '802')?.quantidade).toBe(24)
+  })
+
+  it('aplica um parafuso, um olhal e dois anéis por poste com curva', () => {
+    const dados = criarDadosIniciais()
+    dados.tipoServico = 'equipagem-poste'
+    dados.quantidadePostes = 1
+    dados.quantidadePostesAngulo = 1
+
+    const itens = calcularMateriaisAutomaticos(dados)
+
+    expect(itens.find((item) => item.codigo === '206')?.quantidade).toBe(1)
+    expect(itens.find((item) => item.codigo === '424')?.quantidade).toBe(1)
+    expect(itens.find((item) => item.codigo === '802')?.quantidade).toBe(2)
+  })
+
+  it('escolhe a alça correta por linha de cabo e preserva capacidades repetidas', () => {
+    const dados = criarDadosIniciais()
+    dados.tipoServico = 'equipagem-poste'
+    dados.quantidadePostes = 1
+    dados.quantidadePostesAngulo = 1
+    dados.cabos = [
+      { id: 'cabo-6', capacidade: 6, metragem: 100 },
+      { id: 'cabo-12', capacidade: 12, metragem: 100 },
+      { id: 'cabo-24', capacidade: 24, metragem: 100 },
+      { id: 'cabo-36', capacidade: 36, metragem: 100 },
+      { id: 'cabo-72', capacidade: 72, metragem: 100 },
+      { id: 'cabo-144', capacidade: 144, metragem: 100 },
+    ]
+
+    const itens = calcularMateriaisAutomaticos(dados)
+    const quantidades = (codigo: string) => itens.filter((item) => item.codigo === codigo).map((item) => item.quantidade)
+
+    expect(quantidades('1057')).toEqual([2, 2])
+    expect(quantidades('1763')).toEqual([2, 2])
+    expect(quantidades('67')).toEqual([2])
+    expect(quantidades('1720')).toEqual([2])
+    expect(itens.filter((item) => ['1057', '1763', '67', '1720'].includes(item.codigo ?? '')).every((item) => item.unidade === 'und')).toBe(true)
   })
 
   it('inclui a splitter box escolhida e um adesivo por CTO de prédio', () => {

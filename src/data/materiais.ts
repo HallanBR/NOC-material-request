@@ -1,11 +1,7 @@
 import type { Material } from '../types'
-import { materiaisPendentes } from './materiaisPendentes'
 import { materiaisPublicos } from './materiaisPublicos'
 
-export const materiais: Material[] = [
-  ...materiaisPublicos,
-  ...materiaisPendentes,
-]
+export const materiais: Material[] = materiaisPublicos
 
 export const materialPorCodigo = (codigo: string) =>
   materiais.find((material) => material.codigo === codigo)

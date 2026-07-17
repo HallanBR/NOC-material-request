@@ -1,6 +1,6 @@
 import { EscolhaSimNao } from './EscolhaSimNao'
 import { SelecaoCabos } from './SelecaoCabos'
-import type { CapacidadeFibra, DadosSolicitacao, ModoRompimento } from '../types'
+import type { CapacidadeKit, DadosSolicitacao, ModoRompimento } from '../types'
 import { quantidadePostesRetos } from '../rules/regrasMateriais'
 
 type FormularioSolicitacaoProps = {
@@ -8,7 +8,7 @@ type FormularioSolicitacaoProps = {
   aoAlterar: (alteracoes: Partial<DadosSolicitacao>) => void
 }
 
-const capacidades: CapacidadeFibra[] = [6, 12, 24, 36, 72, 144]
+const capacidadesKits: CapacidadeKit[] = [24, 36, 72, 144]
 
 const servicos = [
   { valor: 'rompimento', rotulo: 'Rompimento' },
@@ -58,7 +58,7 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
     })
   }
 
-  const alternarKit = (capacidade: CapacidadeFibra) =>
+  const alternarKit = (capacidade: CapacidadeKit) =>
     aoAlterar({
       kits: dados.kits.includes(capacidade)
         ? dados.kits.filter((item) => item !== capacidade)
@@ -128,14 +128,14 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
             <div className="subsecao-formulario">
               <h3>Quais kits?</h3>
               <div className="opcoes-inline">
-                {capacidades.map((capacidade) => (
+                {capacidadesKits.map((capacidade) => (
                   <label key={capacidade}>
                     <input type="checkbox" checked={dados.kits.includes(capacidade)} onChange={() => alternarKit(capacidade)} />
                     Kit de {capacidade} fibras
                   </label>
                 ))}
               </div>
-              <p className="texto-ajuda destaque-pendente">Os kits continuam identificados como pendentes até a confirmação de seus códigos.</p>
+              <p className="texto-ajuda">Os kits disponíveis são de 24, 36, 72 e 144 fibras.</p>
             </div>
           )}
         </div>

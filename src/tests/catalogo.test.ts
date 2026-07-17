@@ -3,9 +3,7 @@ import { materialPorCodigo, materiais } from '../data/materiais'
 
 describe('catálogo operacional público', () => {
   it('mantém apenas os materiais necessários ao fluxo, sem dados de origem', () => {
-    expect(materiais.map((item) => item.categoria)).toEqual(
-      expect.arrayContaining(['OPERACIONAL', 'KIT']),
-    )
+    expect(materiais.map((item) => item.categoria)).toEqual(expect.arrayContaining(['OPERACIONAL']))
     expect(materiais.every((item) => item.origem === undefined)).toBe(true)
   })
 
@@ -22,6 +20,21 @@ describe('catálogo operacional público', () => {
     expect(materialPorCodigo('1643')?.nome).toBe('SPLITTER BOX PLC 1X8 APC')
     expect(materialPorCodigo('2029')?.nome).toBe('SPLITTER BOX PLC 1X16 APC')
     expect(materialPorCodigo('1760')?.nome).toBe('ADESIVOS SPLITTER BOX - 10X10')
+  })
+
+  it('oferece alças em unidade conforme a capacidade do cabo', () => {
+    expect(materialPorCodigo('1057')).toMatchObject({ nome: 'ALÇA PREF. CCE 6,80 A 7,40MM BRANCO - 06FO E 12FO', unidade: 'und' })
+    expect(materialPorCodigo('1763')).toMatchObject({ nome: 'ALÇA PREF. CB.CCE-APL-ASF 9,3 - 10,1 MM - ROXA - 24FO E 36FO', unidade: 'und' })
+    expect(materialPorCodigo('67')).toMatchObject({ nome: 'ALÇA PREF. 12,4 - 13,3MM - LARANJA CURTA - 72FO', unidade: 'und' })
+    expect(materialPorCodigo('1720')).toMatchObject({ nome: 'ALÇA PREF. CABO OPTICO 15 A 16 - MARROM LONGA - 144FO', unidade: 'und' })
+    expect(materialPorCodigo('831')?.unidade).toBe('und')
+  })
+
+  it('oferece apenas os kits de rompimento cadastrados', () => {
+    expect(materialPorCodigo('2292')).toMatchObject({ nome: 'KIT EMERGENCIAL ROMPIMENTO FIBRA 24FO', unidade: 'kit' })
+    expect(materialPorCodigo('2293')).toMatchObject({ nome: 'KIT EMERGENCIAL ROMPIMENTO FIBRA 36FO', unidade: 'kit' })
+    expect(materialPorCodigo('2294')).toMatchObject({ nome: 'KIT EMERGENCIAL ROMPIMENTO FIBRA 72FO', unidade: 'kit' })
+    expect(materialPorCodigo('2295')).toMatchObject({ nome: 'KIT EMERGENCIAL ROMPIMENTO FIBRA 144FO', unidade: 'kit' })
   })
 
   it('oferece splitters e adesivos corretos para CTO de poste', () => {

@@ -1,5 +1,5 @@
-import { materialPorCodigo, materialPorId } from '../data/materiais'
-import type { DadosSolicitacao, ItemSolicitacao, Material, RegraMaterial, Unidade } from '../types'
+import { materialPorCodigo } from '../data/materiais'
+import type { CapacidadeFibra, CapacidadeKit, DadosSolicitacao, ItemSolicitacao, Material, RegraMaterial, Unidade } from '../types'
 
 type Composicao = { codigo: string; quantidade: number; unidade?: Unidade }
 
@@ -15,17 +15,19 @@ const composicoes: Record<'raquete' | 'reto' | 'angulo' | 'cto', Composicao[]> =
     { codigo: '219', quantidade: 1 }, { codigo: '802', quantidade: 2 },
   ],
   angulo: [
-    { codigo: '207', quantidade: 1 }, { codigo: '243', quantidade: 2 }, { codigo: '206', quantidade: 2 },
-    { codigo: '424', quantidade: 2 }, { codigo: '1057', quantidade: 2 }, { codigo: '802', quantidade: 4 },
+    { codigo: '207', quantidade: 1 }, { codigo: '243', quantidade: 2 }, { codigo: '206', quantidade: 1 },
+    { codigo: '424', quantidade: 1 }, { codigo: '802', quantidade: 2 },
   ],
   cto: [
     { codigo: '207', quantidade: 1 }, { codigo: '243', quantidade: 2 }, { codigo: '206', quantidade: 2 },
-    { codigo: '424', quantidade: 2 }, { codigo: '1057', quantidade: 2 }, { codigo: '133', quantidade: 2 },
-    { codigo: '551', quantidade: 2 }, { codigo: '802', quantidade: 4 }, { codigo: '688', quantidade: 1 },
+    { codigo: '424', quantidade: 2 }, { codigo: '133', quantidade: 2 }, { codigo: '551', quantidade: 2 },
+    { codigo: '802', quantidade: 2 }, { codigo: '688', quantidade: 1 },
   ],
 }
 
-const capacidadeParaCodigo: Record<number, string> = { 6: '1698', 12: '50', 24: '51', 36: '66', 72: '86', 144: '1725' }
+const capacidadeParaCodigo: Record<CapacidadeFibra, string> = { 6: '1698', 12: '50', 24: '51', 36: '66', 72: '86', 144: '1725' }
+const capacidadeParaCodigoAlca: Record<CapacidadeFibra, string> = { 6: '1057', 12: '1057', 24: '1763', 36: '1763', 72: '67', 144: '1720' }
+const capacidadeParaCodigoKit: Record<CapacidadeKit, string> = { 24: '2292', 36: '2293', 72: '2294', 144: '2295' }
 
 export const quantidadePostesRetos = (dados: DadosSolicitacao) =>
   Math.max(0, dados.quantidadePostes - dados.quantidadePostesAngulo - dados.quantidadePostesCto)
@@ -108,13 +110,33 @@ export const regrasMateriais: RegraMaterial[] = [
     ),
   },
   {
-    id: 'RG-KIT-PENDENTE',
-    nome: 'Kits indicados no fluxo',
-    descricao: 'Inclui um registro pendente por kit selecionado, pois o diagrama não informa código corporativo.',
+    id: 'RG-KIT-ROMPIMENTO',
+    nome: 'Kits para rompimento',
+    descricao: 'Inclui o kit cadastrado correspondente a cada capacidade selecionada.',
     condicao: (dados) => dados.modoRompimento === 'kit' && dados.kits.length > 0,
     acao: (dados) => dados.kits.flatMap((capacidade) =>
-      criarItem(materialPorId(`kit-${capacidade}-pendente`), 1, 'RG-KIT-PENDENTE', 'kit'),
+      criarItem(materialPorCodigo(capacidadeParaCodigoKit[capacidade]), 1, 'RG-KIT-ROMPIMENTO', 'kit'),
     ),
+  },
+  {
+    id: 'RG-ALCA-POR-CABO',
+    nome: 'Alças conforme o cabo selecionado',
+    descricao: 'Inclui duas alças por poste com curva ou CTO, usando o código correspondente a cada linha de cabo.',
+    condicao: (dados) =>
+      servicoUsaPostes(dados) &&
+      dados.cabos.length > 0 &&
+      dados.quantidadePostesAngulo + dados.quantidadePostesCto > 0,
+    acao: (dados) => {
+      const quantidadePorCabo = 2 * (dados.quantidadePostesAngulo + dados.quantidadePostesCto)
+      return dados.cabos.flatMap((cabo) =>
+        criarItem(
+          materialPorCodigo(capacidadeParaCodigoAlca[cabo.capacidade]),
+          quantidadePorCabo,
+          `RG-ALCA-POR-CABO-${cabo.id}`,
+          'und',
+        ),
+      )
+    },
   },
   {
     id: 'RG-CTO-PREDIAL-SPLITTER-BOX',
@@ -305,7 +327,9 @@ export const calcularMateriaisAutomaticos = (dados: DadosSolicitacao): ItemSolic
   const itens = regrasMateriais.filter((regra) => regra.condicao(dados)).flatMap((regra) => regra.acao(dados))
   const agrupados = new Map<string, ItemSolicitacao>()
   for (const item of itens) {
-    const preservarLinha = item.regras[0].startsWith('RG-CABO-AFETADO-')
+    const preservarLinha =
+      item.regras[0].startsWith('RG-CABO-AFETADO-') ||
+      item.regras[0].startsWith('RG-ALCA-POR-CABO-')
     const chave = preservarLinha ? item.id : item.materialId
     const existente = agrupados.get(chave)
     if (existente) {
