@@ -25,6 +25,8 @@ describe('catálogo operacional público', () => {
   })
 
   it('oferece splitters e adesivos corretos para CTO de poste', () => {
+    expect(materialPorCodigo('1066')?.nome).toBe('GABINETE 18 - CTO (MONTADO C/SPLITTER 1x8)')
+    expect(materialPorCodigo('700')?.nome).toBe('GABINETE 18 - CTO (DESMONTADO)')
     expect(materialPorCodigo('1756')?.nome).toBe('ADESIVO PARA CTO - INTERNO')
     expect(materialPorCodigo('1682')?.nome).toBe('ADESIVO PARA CTO - EXTERNO SEM IDENTIFICACAO')
     expect(materialPorCodigo('1575')?.nome).toBe('SPLITTER 1x8 CONECTORIZADO')

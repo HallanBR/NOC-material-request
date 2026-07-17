@@ -107,21 +107,53 @@ describe('regras de materiais', () => {
     expect(itens.find((item) => item.codigo === '1066')).toBeUndefined()
   })
 
-  it('inclui caixa, splitters e os dois adesivos para CTO de poste avulsa', () => {
+  it('usa a CTO já montada quando a configuração padrão tem um splitter 1x8', () => {
     const dados = criarDadosIniciais()
     dados.tipoServico = 'avulsa'
     dados.tipoCaixaAvulsa = 'cto-poste'
     dados.quantidadeCaixasAvulsas = 3
-    dados.quantidadeSplitter1x8 = 2
-    dados.quantidadeSplitter1x16 = 1
+    dados.configuracaoCtoPosteAvulsa = '1x8'
 
     const itens = calcularMateriaisAutomaticos(dados)
 
     expect(itens.find((item) => item.codigo === '1066')?.quantidade).toBe(3)
-    expect(itens.find((item) => item.codigo === '1575')?.quantidade).toBe(2)
-    expect(itens.find((item) => item.codigo === '713')?.quantidade).toBe(1)
+    expect(itens.find((item) => item.codigo === '700')).toBeUndefined()
+    expect(itens.find((item) => item.codigo === '1575')).toBeUndefined()
+    expect(itens.find((item) => item.codigo === '713')).toBeUndefined()
     expect(itens.find((item) => item.codigo === '1756')?.quantidade).toBe(3)
     expect(itens.find((item) => item.codigo === '1682')?.quantidade).toBe(3)
+  })
+
+  it('adiciona um splitter 1x8 separado por CTO quando são escolhidos dois splitters', () => {
+    const dados = criarDadosIniciais()
+    dados.tipoServico = 'avulsa'
+    dados.tipoCaixaAvulsa = 'cto-poste'
+    dados.quantidadeCaixasAvulsas = 2
+    dados.configuracaoCtoPosteAvulsa = '2x1x8'
+
+    const itens = calcularMateriaisAutomaticos(dados)
+
+    expect(itens.find((item) => item.codigo === '1066')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '1575')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '700')).toBeUndefined()
+    expect(itens.find((item) => item.codigo === '713')).toBeUndefined()
+  })
+
+  it('usa gabinete desmontado e splitter separado para CTO de poste 1x16', () => {
+    const dados = criarDadosIniciais()
+    dados.tipoServico = 'avulsa'
+    dados.tipoCaixaAvulsa = 'cto-poste'
+    dados.quantidadeCaixasAvulsas = 2
+    dados.configuracaoCtoPosteAvulsa = '1x16'
+
+    const itens = calcularMateriaisAutomaticos(dados)
+
+    expect(itens.find((item) => item.codigo === '700')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '713')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '1066')).toBeUndefined()
+    expect(itens.find((item) => item.codigo === '1575')).toBeUndefined()
+    expect(itens.find((item) => item.codigo === '1756')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '1682')?.quantidade).toBe(2)
   })
 
   it('permite solicitar somente um tipo de adesivo para CTO de poste', () => {

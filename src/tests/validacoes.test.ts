@@ -44,7 +44,7 @@ describe('validação da solicitação', () => {
     expect(validarSolicitacao(dadosValidos()).erros).toEqual([])
   })
 
-  it('exige splitter quando CTO de poste é solicitada de forma avulsa', () => {
+  it('exige a configuração da CTO de poste solicitada de forma avulsa', () => {
     const dados = {
       ...criarDadosIniciais(),
       equipeRetirada: 'ATELECOM',
@@ -55,7 +55,8 @@ describe('validação da solicitação', () => {
     }
     const resultado = validarSolicitacao(dados)
 
-    expect(resultado.erros).toContain('Informe a quantidade de pelo menos um splitter para a CTO de poste.')
+    expect(resultado.erros).toContain('Selecione a configuração de splitter da CTO de poste.')
+    expect(validarSolicitacao({ ...dados, configuracaoCtoPosteAvulsa: '1x8' }).erros).toEqual([])
   })
 
   it('exige somente a splittagem específica para CTO de prédio', () => {

@@ -49,10 +49,8 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
       tipoCaixaAvulsa,
       splittagemCtoPredialAvulsa:
         tipoCaixaAvulsa === 'cto-predial' ? dados.splittagemCtoPredialAvulsa : '',
-      quantidadeSplitter1x8:
-        tipoCaixaAvulsa === 'cto-poste' ? dados.quantidadeSplitter1x8 : 0,
-      quantidadeSplitter1x16:
-        tipoCaixaAvulsa === 'cto-poste' ? dados.quantidadeSplitter1x16 : 0,
+      configuracaoCtoPosteAvulsa:
+        tipoCaixaAvulsa === 'cto-poste' ? dados.configuracaoCtoPosteAvulsa || '1x8' : '',
       quantidadeAdesivoInternoCtoPoste:
         tipoCaixaAvulsa === 'adesivos-cto-poste' ? dados.quantidadeAdesivoInternoCtoPoste : 0,
       quantidadeAdesivoExternoCtoPoste:
@@ -273,12 +271,20 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
 
           {dados.tipoCaixaAvulsa === 'cto-poste' && (
             <div className="subsecao-formulario">
-              <h3>Splitters da CTO de poste</h3>
+              <h3>Configuração da CTO de poste</h3>
               <p className="texto-ajuda">Os adesivos interno e externo serão adicionados automaticamente, um de cada por CTO de poste.</p>
-              <div className="grade-formulario grade-curta">
-                <label><span>1575 - Splitter 1x8 conectorizado</span><input min="0" type="number" value={dados.quantidadeSplitter1x8 || ''} onChange={(event) => aoAlterar({ quantidadeSplitter1x8: Number(event.target.value) })} /></label>
-                <label><span>713 - Splitter PLC 1x16 conectorizado</span><input min="0" type="number" value={dados.quantidadeSplitter1x16 || ''} onChange={(event) => aoAlterar({ quantidadeSplitter1x16: Number(event.target.value) })} /></label>
-              </div>
+              <label className="campo-numerico-condicional">
+                <span>Montagem e splitter *</span>
+                <select
+                  value={dados.configuracaoCtoPosteAvulsa}
+                  onChange={(event) => aoAlterar({ configuracaoCtoPosteAvulsa: event.target.value as DadosSolicitacao['configuracaoCtoPosteAvulsa'] })}
+                >
+                  <option value="">Selecione</option>
+                  <option value="1x8">1 splitter 1x8 — CTO já montada (1066)</option>
+                  <option value="2x1x8">2 splitters 1x8 — CTO montada + 1 splitter separado (1066 + 1575)</option>
+                  <option value="1x16">1 splitter 1x16 — CTO desmontada + splitter separado (700 + 713)</option>
+                </select>
+              </label>
             </div>
           )}
 

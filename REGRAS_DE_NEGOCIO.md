@@ -15,10 +15,11 @@ As regras estão centralizadas em `src/rules/regrasMateriais.ts`. Cada uma possu
 | `RG-CTO-POSTE-ADESIVO-INTERNO` / `EXTERNO` | Há troca completa de CTO de poste. | Inclui um adesivo interno e um externo por CTO. |
 | `RG-CTO-PREDIAL-SPLITTER-BOX` | CTO de prédio com splittagem 1x8 ou 1x16 escolhida. | Inclui a splitter box correspondente na mesma quantidade de CTOs. |
 | `RG-CTO-PREDIAL-ADESIVO` | Há solicitação de CTO de prédio. | Inclui um adesivo por CTO de prédio solicitada. |
-| `RG-AVULSA-CAIXA` | CEO ou CTO de poste foi escolhido em solicitação avulsa. | Inclui a caixa escolhida. |
+| `RG-AVULSA-CAIXA` | CEO ou CTO de poste foi escolhido em solicitação avulsa. | Inclui a CEO, a CTO montada 1066 ou o gabinete desmontado 700 conforme a configuração. |
 | `RG-AVULSA-CTO-PREDIAL-SPLITTER-BOX` | CTO de prédio avulsa com splittagem escolhida. | Inclui a splitter box na mesma quantidade das CTOs. |
 | `RG-AVULSA-CTO-PREDIAL-ADESIVO` | Há CTO de prédio avulsa. | Inclui um adesivo por CTO de prédio. |
-| `RG-AVULSA-SPLITTER-1X8` / `1X16` | Há quantidade informada para splitter de CTO de poste avulsa. | Inclui os splitters conectorizados informados. |
+| `RG-AVULSA-CTO-POSTE-SPLITTER-EXTRA-1X8` | Foi escolhida a CTO com dois splitters 1x8. | Inclui uma CTO 1066 já montada e mais um splitter 1575 separado por CTO. |
+| `RG-AVULSA-CTO-POSTE-SPLITTER-1X16` | Foi escolhida a CTO com splitter 1x16. | Inclui um gabinete desmontado 700 e um splitter 713 separado por CTO. |
 | `RG-AVULSA-CTO-POSTE-ADESIVO-INTERNO` / `EXTERNO` | Há CTO de poste avulsa. | Inclui um adesivo interno e um externo por CTO. |
 | `RG-AVULSA-ADESIVO-INTERNO` / `EXTERNO` | Foi escolhida a solicitação somente de adesivos. | Inclui apenas as quantidades informadas para cada adesivo. |
 
@@ -29,7 +30,8 @@ As regras estão centralizadas em `src/rules/regrasMateriais.ts`. Cada uma possu
 - Cada linha de cabo requer metragem maior que zero.
 - Curvas e CTOs não podem superar o total de postes; a quantidade de postes com drop também não pode superá-lo. O drop é uma característica do poste, não uma segunda composição que se soma às ferragens dele.
 - CTO de prédio exige quantidade e escolha entre splitter box 1x8 ou 1x16, sem perguntas de troca completa ou troca apenas do splitter.
-- Na solicitação avulsa, CTO de prédio e CTO de poste são opções diferentes. CTO de prédio recebe seu adesivo; CTO de poste recebe adesivos interno e externo. O modo somente adesivos aceita quantidades independentes.
+- Na solicitação avulsa, CTO de prédio e CTO de poste são opções diferentes. A CTO de poste com 1x8 usa o código 1066, que já inclui um splitter. A opção com dois splitters 1x8 acrescenta um código 1575 por CTO. A opção 1x16 usa o gabinete desmontado 700 mais um splitter 713 por CTO.
+- CTO de prédio recebe seu adesivo; CTO de poste recebe adesivos interno e externo. O modo somente adesivos aceita quantidades independentes.
 - Códigos ausentes não bloqueiam a geração quando o dado estiver marcado como pendência; geram aviso explícito e aparecem no corpo do e-mail.
 
 ## Rastreabilidade

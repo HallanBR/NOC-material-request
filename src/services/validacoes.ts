@@ -74,9 +74,9 @@ export const validarSolicitacao = (dados: DadosSolicitacao): ResultadoValidacao 
     }
     if (
       dados.tipoCaixaAvulsa === 'cto-poste' &&
-      dados.quantidadeSplitter1x8 <= 0 && dados.quantidadeSplitter1x16 <= 0
+      !dados.configuracaoCtoPosteAvulsa
     ) {
-      erros.push('Informe a quantidade de pelo menos um splitter para a CTO de poste.')
+      erros.push('Selecione a configuração de splitter da CTO de poste.')
     }
     if (
       dados.tipoCaixaAvulsa === 'adesivos-cto-poste' &&

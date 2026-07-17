@@ -59,8 +59,7 @@ export type DadosSolicitacao = {
   tipoCaixaAvulsa: 'ceo' | 'cto-predial' | 'cto-poste' | 'adesivos-cto-poste' | ''
   quantidadeCaixasAvulsas: number
   splittagemCtoPredialAvulsa: '1x8' | '1x16' | ''
-  quantidadeSplitter1x8: number
-  quantidadeSplitter1x16: number
+  configuracaoCtoPosteAvulsa: '1x8' | '2x1x8' | '1x16' | ''
   quantidadeAdesivoInternoCtoPoste: number
   quantidadeAdesivoExternoCtoPoste: number
 }

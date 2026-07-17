@@ -7,6 +7,7 @@ Aplicação web estática para montar solicitações de materiais do NOC, aplica
 - registra equipe de retirada, data prevista, OS e protocolo em campos separados;
 - trata rompimento, troca/equipagem de poste, caixa danificada e solicitação avulsa;
 - diferencia CTO de prédio e CTO de poste, incluindo splitters e adesivos corretos em cada fluxo;
+- monta a CTO de poste com 1x8, dois splitters 1x8 ou gabinete desmontado com splitter 1x16;
 - permite solicitar somente adesivos internos e/ou externos para CTO de poste;
 - permite informar múltiplos trechos de cabo, inclusive com a mesma capacidade;
 - calcula ferragens por postes retos, curvas, CTOs e raquetes;
