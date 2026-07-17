@@ -6,7 +6,8 @@ export const criarDadosIniciais = (): DadosSolicitacao => {
   return {
     equipeRetirada: '',
     dataRetirada: hoje,
-    protocoloOs: '',
+    os: '',
+    protocolo: '',
     tipoServico: 'rompimento',
     modoRompimento: '',
     kits: [],

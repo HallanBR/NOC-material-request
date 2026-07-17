@@ -20,7 +20,7 @@ const rotuloServico: Record<DadosSolicitacao['tipoServico'], string> = {
 }
 
 export const gerarAssunto = (dados: DadosSolicitacao) =>
-  `Solicitação de materiais - ${dados.protocoloOs.trim() || 'NOC'}`
+  `Solicitação de materiais - OS ${dados.os.trim() || 'Não informada'} - Protocolo ${dados.protocolo.trim() || 'Não informado'}`
 
 export const gerarSolicitacao = (dados: DadosSolicitacao, itens: ItemSolicitacao[]): SolicitacaoGerada => {
   const pendencias = itens.filter((item) => item.pendenteCadastro || !item.codigo)
@@ -38,7 +38,8 @@ export const gerarSolicitacao = (dados: DadosSolicitacao, itens: ItemSolicitacao
     '',
     'Detalhes da solicitação',
     '',
-    `Protocolo/OS: ${dados.protocoloOs}`,
+    `OS: ${dados.os}`,
+    `Protocolo: ${dados.protocolo}`,
     `Retirada por: ${dados.equipeRetirada}`,
     `Data prevista para retirada: ${formatarData(dados.dataRetirada)}`,
     `Tipo de serviço: ${rotuloServico[dados.tipoServico]}`,

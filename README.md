@@ -4,7 +4,7 @@ Aplicação web estática para montar solicitações de materiais do NOC, aplica
 
 ## O que o sistema faz
 
-- registra equipe de retirada, data prevista e OS/protocolo;
+- registra equipe de retirada, data prevista, OS e protocolo em campos separados;
 - trata rompimento, troca/equipagem de poste, caixa danificada e solicitação avulsa;
 - permite informar múltiplos trechos de cabo, inclusive com a mesma capacidade;
 - calcula ferragens por postes retos, curvas, CTOs e raquetes;

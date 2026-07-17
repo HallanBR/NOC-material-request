@@ -5,7 +5,12 @@ import { criarArquivoTxt, nomeArquivoSolicitacao } from '../services/exportadorT
 import { gerarAssunto, gerarSolicitacao } from '../services/geradorSolicitacao'
 import type { ItemSolicitacao } from '../types'
 
-const dados = { ...criarDadosIniciais(), equipeRetirada: 'ATELECOM', protocoloOs: '113626180184543141' }
+const dados = {
+  ...criarDadosIniciais(),
+  equipeRetirada: 'ATELECOM',
+  os: 'OS-12345',
+  protocolo: '113626180184543141',
+}
 
 const itemAutomatico = (): ItemSolicitacao => {
   const material = materialPorCodigo('1698')!
@@ -13,13 +18,17 @@ const itemAutomatico = (): ItemSolicitacao => {
 }
 
 describe('geração do e-mail e TXT', () => {
-  it('monta um assunto com o protocolo', () => {
-    expect(gerarAssunto(dados)).toBe('Solicitação de materiais - 113626180184543141')
+  it('monta um assunto com OS e protocolo separados', () => {
+    expect(gerarAssunto(dados)).toBe(
+      'Solicitação de materiais - OS OS-12345 - Protocolo 113626180184543141',
+    )
   })
 
   it('gera corpo com equipe de retirada e item automático', () => {
     const solicitacao = gerarSolicitacao(dados, [itemAutomatico()])
 
+    expect(solicitacao.corpo).toContain('OS: OS-12345')
+    expect(solicitacao.corpo).toContain('Protocolo: 113626180184543141')
     expect(solicitacao.corpo).toContain('Retirada por: ATELECOM')
     expect(solicitacao.corpo).toContain('1698 - CABO CFOA-SM-ASU-80-S 06 FIBRAS - 250 m')
     expect(solicitacao.corpo).not.toContain('[Regra:')

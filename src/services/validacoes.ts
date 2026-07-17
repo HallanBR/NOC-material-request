@@ -7,7 +7,8 @@ export const validarSolicitacao = (dados: DadosSolicitacao): ResultadoValidacao 
 
   if (!dados.equipeRetirada.trim()) erros.push('Informe a equipe que irá retirar o material.')
   if (!dados.dataRetirada) erros.push('Informe a data prevista para retirada.')
-  if (!dados.protocoloOs.trim()) erros.push('Informe o número da obra, OS ou protocolo.')
+  if (!dados.os.trim()) erros.push('Informe a OS.')
+  if (!dados.protocolo.trim()) erros.push('Informe o protocolo.')
 
   if (dados.tipoServico === 'rompimento') {
     if (!dados.modoRompimento) erros.push('Escolha se o rompimento será atendido com cabo ou com kit.')

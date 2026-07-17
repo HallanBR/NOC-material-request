@@ -86,7 +86,7 @@ function App() {
             solicitacao={solicitacaoGerada}
             aoCopiarAssunto={() => void copiar(solicitacaoGerada.assunto, 'Assunto')}
             aoCopiarTexto={() => void copiar(solicitacaoGerada.corpo, 'Texto do e-mail')}
-            aoBaixarTxt={() => { baixarArquivoTxt(solicitacaoGerada.corpo, dados.protocoloOs); setMensagem('Arquivo TXT preparado para download.') }}
+            aoBaixarTxt={() => { baixarArquivoTxt(solicitacaoGerada.corpo, dados.os); setMensagem('Arquivo TXT preparado para download.') }}
             aoEditar={() => { document.getElementById('formulario-solicitacao')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); setMensagem('Edite os campos necessários e gere a solicitação novamente.') }}
           />
         )}

@@ -5,7 +5,8 @@ import { validarSolicitacao } from '../services/validacoes'
 const dadosValidos = () => ({
   ...criarDadosIniciais(),
   equipeRetirada: 'ATELECOM',
-  protocoloOs: 'OS-12345',
+  os: 'OS-12345',
+  protocolo: 'PROTO-67890',
   modoRompimento: 'cabo' as const,
   cabos: [{ id: 'trecho-1', capacidade: 6 as const, metragem: 100 }],
 })
@@ -16,7 +17,8 @@ describe('validação da solicitação', () => {
 
     expect(resultado.erros).toEqual(expect.arrayContaining([
       'Informe a equipe que irá retirar o material.',
-      'Informe o número da obra, OS ou protocolo.',
+      'Informe a OS.',
+      'Informe o protocolo.',
     ]))
     expect(resultado.erros).not.toEqual(expect.arrayContaining(['Informe a cidade de atendimento.']))
   })
@@ -43,7 +45,14 @@ describe('validação da solicitação', () => {
   })
 
   it('exige splitter quando CTO é solicitada de forma avulsa', () => {
-    const dados = { ...criarDadosIniciais(), equipeRetirada: 'ATELECOM', protocoloOs: 'OS-12345', tipoServico: 'avulsa' as const, tipoCaixaAvulsa: 'cto' as const }
+    const dados = {
+      ...criarDadosIniciais(),
+      equipeRetirada: 'ATELECOM',
+      os: 'OS-12345',
+      protocolo: 'PROTO-67890',
+      tipoServico: 'avulsa' as const,
+      tipoCaixaAvulsa: 'cto' as const,
+    }
     const resultado = validarSolicitacao(dados)
 
     expect(resultado.erros).toContain('Informe a quantidade de pelo menos um splitter para a CTO.')

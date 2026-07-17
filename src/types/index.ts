@@ -39,7 +39,8 @@ export type CaboSolicitado = {
 export type DadosSolicitacao = {
   equipeRetirada: string
   dataRetirada: string
-  protocoloOs: string
+  os: string
+  protocolo: string
   tipoServico: TipoServico
   modoRompimento: ModoRompimento
   kits: CapacidadeFibra[]

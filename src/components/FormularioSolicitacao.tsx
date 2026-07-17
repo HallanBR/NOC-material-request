@@ -61,8 +61,12 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
             />
           </label>
           <label>
-            <span>Obra, OS ou protocolo *</span>
-            <input value={dados.protocoloOs} onChange={(event) => aoAlterar({ protocoloOs: event.target.value })} />
+            <span>OS *</span>
+            <input value={dados.os} onChange={(event) => aoAlterar({ os: event.target.value })} />
+          </label>
+          <label>
+            <span>Protocolo *</span>
+            <input value={dados.protocolo} onChange={(event) => aoAlterar({ protocolo: event.target.value })} />
           </label>
           <label>
             <span>Data prevista para retirada *</span>
