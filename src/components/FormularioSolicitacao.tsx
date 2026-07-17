@@ -33,6 +33,17 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
     })
   }
 
+  const selecionarTipoCaixa = (tipoCaixa: DadosSolicitacao['tipoCaixa']) => {
+    const ctoPredial = tipoCaixa === 'cto-predial'
+    aoAlterar({
+      tipoCaixa,
+      trocarCaixaCompleta: ctoPredial ? null : dados.trocarCaixaCompleta,
+      trocarSomenteSplitter: ctoPredial ? null : dados.trocarSomenteSplitter,
+      splittagem: ctoPredial ? '' : dados.splittagem,
+      splittagemCtoPredial: ctoPredial ? dados.splittagemCtoPredial : '',
+    })
+  }
+
   const alternarKit = (capacidade: CapacidadeFibra) =>
     aoAlterar({
       kits: dados.kits.includes(capacidade)
@@ -159,7 +170,7 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
           <div className="grade-formulario grade-curta">
             <label>
               <span>Tipo de caixa *</span>
-              <select value={dados.tipoCaixa} onChange={(event) => aoAlterar({ tipoCaixa: event.target.value as DadosSolicitacao['tipoCaixa'] })}>
+              <select value={dados.tipoCaixa} onChange={(event) => selecionarTipoCaixa(event.target.value as DadosSolicitacao['tipoCaixa'])}>
                 <option value="">Selecione</option>
                 <option value="cto-predial">CTO de prédio</option>
                 <option value="cto-poste">CTO de poste</option>
@@ -171,20 +182,36 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
               <input min="1" type="number" value={dados.quantidadeCaixas || ''} onChange={(event) => aoAlterar({ quantidadeCaixas: Number(event.target.value) })} />
             </label>
           </div>
-          <EscolhaSimNao id="troca-caixa" legenda="Trocar caixa completa?" valor={dados.trocarCaixaCompleta} aoAlterar={(trocarCaixaCompleta) => aoAlterar({ trocarCaixaCompleta })} />
-          {dados.trocarCaixaCompleta === false && (
+          {dados.tipoCaixa === 'cto-predial' ? (
+            <label className="campo-numerico-condicional">
+              <span>Splitter da CTO de prédio *</span>
+              <select
+                value={dados.splittagemCtoPredial}
+                onChange={(event) => aoAlterar({ splittagemCtoPredial: event.target.value as DadosSolicitacao['splittagemCtoPredial'] })}
+              >
+                <option value="">Selecione</option>
+                <option value="1x8">Splitter Box PLC 1x8 APC</option>
+                <option value="1x16">Splitter Box PLC 1x16 APC</option>
+              </select>
+            </label>
+          ) : dados.tipoCaixa ? (
             <>
-              <EscolhaSimNao id="troca-splitter" legenda="Trocar apenas splitter?" valor={dados.trocarSomenteSplitter} aoAlterar={(trocarSomenteSplitter) => aoAlterar({ trocarSomenteSplitter })} />
-              {dados.trocarSomenteSplitter === true && (
-                <label className="campo-numerico-condicional">
-                  <span>Splittagem</span>
-                  <select value={dados.splittagem} onChange={(event) => aoAlterar({ splittagem: event.target.value as DadosSolicitacao['splittagem'] })}>
-                    <option value="">Selecione</option><option value="1x8">1x8</option><option value="1x16">1x16</option>
-                  </select>
-                </label>
+              <EscolhaSimNao id="troca-caixa" legenda="Trocar caixa completa?" valor={dados.trocarCaixaCompleta} aoAlterar={(trocarCaixaCompleta) => aoAlterar({ trocarCaixaCompleta })} />
+              {dados.trocarCaixaCompleta === false && (
+                <>
+                  <EscolhaSimNao id="troca-splitter" legenda="Trocar apenas splitter?" valor={dados.trocarSomenteSplitter} aoAlterar={(trocarSomenteSplitter) => aoAlterar({ trocarSomenteSplitter })} />
+                  {dados.trocarSomenteSplitter === true && (
+                    <label className="campo-numerico-condicional">
+                      <span>Splittagem</span>
+                      <select value={dados.splittagem} onChange={(event) => aoAlterar({ splittagem: event.target.value as DadosSolicitacao['splittagem'] })}>
+                        <option value="">Selecione</option><option value="1x8">1x8</option><option value="1x16">1x16</option>
+                      </select>
+                    </label>
+                  )}
+                </>
               )}
             </>
-          )}
+          ) : null}
         </div>
       )}
 

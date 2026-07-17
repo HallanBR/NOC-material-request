@@ -46,13 +46,20 @@ export const validarSolicitacao = (dados: DadosSolicitacao): ResultadoValidacao 
 
   if (dados.tipoServico === 'caixa-danificada') {
     if (!dados.tipoCaixa) erros.push('Selecione o tipo da caixa danificada.')
-    if (dados.trocarCaixaCompleta === null) erros.push('Informe se a troca será da caixa completa.')
     if (dados.quantidadeCaixas <= 0) erros.push('A quantidade de caixas deve ser maior que zero.')
-    if (dados.trocarCaixaCompleta === false && dados.trocarSomenteSplitter === null) {
-      erros.push('Informe se será realizada apenas a troca do splitter.')
-    }
-    if (dados.trocarSomenteSplitter === true && !dados.splittagem) {
-      erros.push('Selecione a splittagem do splitter a substituir.')
+
+    if (dados.tipoCaixa === 'cto-predial') {
+      if (!dados.splittagemCtoPredial) {
+        erros.push('Selecione o splitter 1x8 ou 1x16 para a CTO de prédio.')
+      }
+    } else if (dados.tipoCaixa) {
+      if (dados.trocarCaixaCompleta === null) erros.push('Informe se a troca será da caixa completa.')
+      if (dados.trocarCaixaCompleta === false && dados.trocarSomenteSplitter === null) {
+        erros.push('Informe se será realizada apenas a troca do splitter.')
+      }
+      if (dados.trocarSomenteSplitter === true && !dados.splittagem) {
+        erros.push('Selecione a splittagem do splitter a substituir.')
+      }
     }
   }
 

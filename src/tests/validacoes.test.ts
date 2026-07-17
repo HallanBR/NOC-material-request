@@ -57,4 +57,23 @@ describe('validação da solicitação', () => {
 
     expect(resultado.erros).toContain('Informe a quantidade de pelo menos um splitter para a CTO.')
   })
+
+  it('exige somente a splittagem específica para CTO de prédio', () => {
+    const dados = {
+      ...criarDadosIniciais(),
+      equipeRetirada: 'ATELECOM',
+      os: 'OS-12345',
+      protocolo: 'PROTO-67890',
+      tipoServico: 'caixa-danificada' as const,
+      tipoCaixa: 'cto-predial' as const,
+      quantidadeCaixas: 2,
+    }
+
+    const incompleta = validarSolicitacao(dados)
+    expect(incompleta.erros).toContain('Selecione o splitter 1x8 ou 1x16 para a CTO de prédio.')
+    expect(incompleta.erros).not.toContain('Informe se a troca será da caixa completa.')
+    expect(incompleta.erros).not.toContain('Informe se será realizada apenas a troca do splitter.')
+
+    expect(validarSolicitacao({ ...dados, splittagemCtoPredial: '1x16' }).erros).toEqual([])
+  })
 })

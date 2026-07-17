@@ -10,8 +10,10 @@ As regras estão centralizadas em `src/rules/regrasMateriais.ts`. Cada uma possu
 | `RG-POSTE-CTO` | Há postes com CTO. | Aplica a composição de CTO. |
 | `RG-CABO-AFETADO` | Há uma linha de cabo com metragem maior que zero. | Adiciona cada linha de cabo de 6/12/24/36/72/144 fibras separadamente, mesmo quando a fibra se repete. |
 | `RG-KIT-PENDENTE` | A inclusão de kit foi marcada. | Inclui o kit selecionado como `PENDENTE DE CADASTRO`. |
-| `RG-CAIXA-COMPLETA` | Caixa danificada com troca completa confirmada. | Inclui CTO, Mini DIO/CDOI ou CEO conforme o tipo escolhido. |
+| `RG-CAIXA-COMPLETA` | CTO de poste ou CEO danificada com troca completa confirmada. | Inclui CTO de poste ou CEO conforme o tipo escolhido. |
 | `RG-SPLITTER` | Troca apenas do splitter e splittagem informada. | Inclui splitter 1x8 ou 1x16. |
+| `RG-CTO-PREDIAL-SPLITTER-BOX` | CTO de prédio com splittagem 1x8 ou 1x16 escolhida. | Inclui a splitter box correspondente na mesma quantidade de CTOs. |
+| `RG-CTO-PREDIAL-ADESIVO` | Há solicitação de CTO de prédio. | Inclui um adesivo por CTO de prédio solicitada. |
 | `RG-AVULSA-CAIXA` | CEO ou CTO foi escolhido em solicitação avulsa. | Inclui a caixa escolhida. |
 | `RG-AVULSA-SPLITTER-1X8` / `1X16` | Há quantidade informada para splitter de CTO avulsa. | Inclui a quantidade indicada para cada splittagem. |
 
@@ -21,7 +23,7 @@ As regras estão centralizadas em `src/rules/regrasMateriais.ts`. Cada uma possu
 - Rompimento exige uma escolha exclusiva entre cabo ou kit.
 - Cada linha de cabo requer metragem maior que zero.
 - Curvas e CTOs não podem superar o total de postes; a quantidade de postes com drop também não pode superá-lo. O drop é uma característica do poste, não uma segunda composição que se soma às ferragens dele.
-- Troca de caixa exige tipo, quantidade e resposta para troca completa. Se a opção for apenas splitter, a splittagem é obrigatória. CTO avulsa exige pelo menos um splitter.
+- CTO de prédio exige quantidade e escolha entre splitter box 1x8 ou 1x16, sem perguntas de troca completa ou troca apenas do splitter. As demais caixas mantêm o fluxo anterior. CTO avulsa exige pelo menos um splitter.
 - Códigos ausentes não bloqueiam a geração quando o dado estiver marcado como pendência; geram aviso explícito e aparecem no corpo do e-mail.
 
 ## Rastreabilidade

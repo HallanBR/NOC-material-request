@@ -74,4 +74,22 @@ describe('regras de materiais', () => {
 
     expect(itens.find((item) => item.codigo === '802')?.quantidade).toBe(32)
   })
+
+  it('inclui a splitter box escolhida e um adesivo por CTO de prédio', () => {
+    for (const [splittagem, codigo] of [['1x8', '1643'], ['1x16', '2029']] as const) {
+      const dados = criarDadosIniciais()
+      dados.tipoServico = 'caixa-danificada'
+      dados.tipoCaixa = 'cto-predial'
+      dados.quantidadeCaixas = 3
+      dados.splittagemCtoPredial = splittagem
+
+      const itens = calcularMateriaisAutomaticos(dados)
+
+      expect(itens.find((item) => item.codigo === codigo)?.quantidade).toBe(3)
+      expect(itens.find((item) => item.codigo === '1760')?.quantidade).toBe(3)
+      expect(itens.find((item) => item.codigo === '2258')).toBeUndefined()
+      expect(itens.find((item) => item.codigo === '1758')).toBeUndefined()
+      expect(itens.find((item) => item.codigo === '204')).toBeUndefined()
+    }
+  })
 })

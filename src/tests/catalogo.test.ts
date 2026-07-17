@@ -17,4 +17,10 @@ describe('catálogo operacional público', () => {
     expect(materialPorCodigo('86')?.unidade).toBe('m')
     expect(materialPorCodigo('1725')?.unidade).toBe('m')
   })
+
+  it('oferece os materiais corretos para CTO de prédio', () => {
+    expect(materialPorCodigo('1643')?.nome).toBe('SPLITTER BOX PLC 1X8 APC')
+    expect(materialPorCodigo('2029')?.nome).toBe('SPLITTER BOX PLC 1X16 APC')
+    expect(materialPorCodigo('1760')?.nome).toBe('ADESIVOS SPLITTER BOX - 10X10')
+  })
 })

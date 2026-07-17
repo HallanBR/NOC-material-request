@@ -54,6 +54,7 @@ export type DadosSolicitacao = {
   trocarCaixaCompleta: boolean | null
   trocarSomenteSplitter: boolean | null
   splittagem: '1x8' | '1x16' | ''
+  splittagemCtoPredial: '1x8' | '1x16' | ''
   quantidadeCaixas: number
   tipoCaixaAvulsa: 'ceo' | 'cto' | ''
   quantidadeCaixasAvulsas: number

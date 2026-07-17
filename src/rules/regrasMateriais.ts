@@ -117,13 +117,39 @@ export const regrasMateriais: RegraMaterial[] = [
     ),
   },
   {
+    id: 'RG-CTO-PREDIAL-SPLITTER-BOX',
+    nome: 'Splitter box da CTO de prédio',
+    descricao: 'Inclui a splitter box 1x8 ou 1x16 escolhida para cada CTO de prédio.',
+    condicao: (dados) =>
+      dados.tipoServico === 'caixa-danificada' && dados.tipoCaixa === 'cto-predial' &&
+      dados.splittagemCtoPredial !== '' && dados.quantidadeCaixas > 0,
+    acao: (dados) => criarItem(
+      materialPorCodigo(dados.splittagemCtoPredial === '1x8' ? '1643' : '2029'),
+      dados.quantidadeCaixas,
+      'RG-CTO-PREDIAL-SPLITTER-BOX',
+    ),
+  },
+  {
+    id: 'RG-CTO-PREDIAL-ADESIVO',
+    nome: 'Adesivo da CTO de prédio',
+    descricao: 'Inclui um adesivo para cada CTO de prédio solicitada.',
+    condicao: (dados) =>
+      dados.tipoServico === 'caixa-danificada' && dados.tipoCaixa === 'cto-predial' &&
+      dados.quantidadeCaixas > 0,
+    acao: (dados) => criarItem(
+      materialPorCodigo('1760'), dados.quantidadeCaixas, 'RG-CTO-PREDIAL-ADESIVO',
+    ),
+  },
+  {
     id: 'RG-CAIXA-COMPLETA',
     nome: 'Troca de caixa completa',
     descricao: 'Inclui a caixa correspondente quando a troca completa foi confirmada.',
     condicao: (dados) =>
-      dados.tipoServico === 'caixa-danificada' && dados.trocarCaixaCompleta === true && dados.quantidadeCaixas > 0,
+      dados.tipoServico === 'caixa-danificada' &&
+      (dados.tipoCaixa === 'cto-poste' || dados.tipoCaixa === 'ceo') &&
+      dados.trocarCaixaCompleta === true && dados.quantidadeCaixas > 0,
     acao: (dados) => {
-      const codigo = dados.tipoCaixa === 'ceo' ? '103' : dados.tipoCaixa === 'cto-predial' ? '2258' : '1066'
+      const codigo = dados.tipoCaixa === 'ceo' ? '103' : '1066'
       return criarItem(materialPorCodigo(codigo), dados.quantidadeCaixas, 'RG-CAIXA-COMPLETA')
     },
   },
@@ -132,7 +158,9 @@ export const regrasMateriais: RegraMaterial[] = [
     nome: 'Troca apenas do splitter',
     descricao: 'Inclui o splitter de 1x8 ou 1x16 informado para a caixa danificada.',
     condicao: (dados) =>
-      dados.tipoServico === 'caixa-danificada' && dados.trocarCaixaCompleta === false &&
+      dados.tipoServico === 'caixa-danificada' &&
+      (dados.tipoCaixa === 'cto-poste' || dados.tipoCaixa === 'ceo') &&
+      dados.trocarCaixaCompleta === false &&
       dados.trocarSomenteSplitter === true && dados.splittagem !== '' && dados.quantidadeCaixas > 0,
     acao: (dados) => criarItem(
       materialPorCodigo(dados.splittagem === '1x8' ? '1758' : '204'), dados.quantidadeCaixas, 'RG-SPLITTER',

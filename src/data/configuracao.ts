@@ -21,6 +21,7 @@ export const criarDadosIniciais = (): DadosSolicitacao => {
     trocarCaixaCompleta: null,
     trocarSomenteSplitter: null,
     splittagem: '',
+    splittagemCtoPredial: '',
     quantidadeCaixas: 1,
     tipoCaixaAvulsa: '',
     quantidadeCaixasAvulsas: 1,
