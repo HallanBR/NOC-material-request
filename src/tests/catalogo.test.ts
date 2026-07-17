@@ -23,4 +23,11 @@ describe('catálogo operacional público', () => {
     expect(materialPorCodigo('2029')?.nome).toBe('SPLITTER BOX PLC 1X16 APC')
     expect(materialPorCodigo('1760')?.nome).toBe('ADESIVOS SPLITTER BOX - 10X10')
   })
+
+  it('oferece splitters e adesivos corretos para CTO de poste', () => {
+    expect(materialPorCodigo('1756')?.nome).toBe('ADESIVO PARA CTO - INTERNO')
+    expect(materialPorCodigo('1682')?.nome).toBe('ADESIVO PARA CTO - EXTERNO SEM IDENTIFICACAO')
+    expect(materialPorCodigo('1575')?.nome).toBe('SPLITTER 1x8 CONECTORIZADO')
+    expect(materialPorCodigo('713')?.nome).toBe('SPLITTER PLC 1x16 CONECTORIZADO SC/APC VERDE')
+  })
 })

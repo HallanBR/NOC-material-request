@@ -44,18 +44,18 @@ describe('validação da solicitação', () => {
     expect(validarSolicitacao(dadosValidos()).erros).toEqual([])
   })
 
-  it('exige splitter quando CTO é solicitada de forma avulsa', () => {
+  it('exige splitter quando CTO de poste é solicitada de forma avulsa', () => {
     const dados = {
       ...criarDadosIniciais(),
       equipeRetirada: 'ATELECOM',
       os: 'OS-12345',
       protocolo: 'PROTO-67890',
       tipoServico: 'avulsa' as const,
-      tipoCaixaAvulsa: 'cto' as const,
+      tipoCaixaAvulsa: 'cto-poste' as const,
     }
     const resultado = validarSolicitacao(dados)
 
-    expect(resultado.erros).toContain('Informe a quantidade de pelo menos um splitter para a CTO.')
+    expect(resultado.erros).toContain('Informe a quantidade de pelo menos um splitter para a CTO de poste.')
   })
 
   it('exige somente a splittagem específica para CTO de prédio', () => {
@@ -75,5 +75,38 @@ describe('validação da solicitação', () => {
     expect(incompleta.erros).not.toContain('Informe se será realizada apenas a troca do splitter.')
 
     expect(validarSolicitacao({ ...dados, splittagemCtoPredial: '1x16' }).erros).toEqual([])
+  })
+
+  it('exige a splittagem para CTO de prédio avulsa', () => {
+    const dados = {
+      ...criarDadosIniciais(),
+      equipeRetirada: 'ATELECOM',
+      os: 'OS-12345',
+      protocolo: 'PROTO-67890',
+      tipoServico: 'avulsa' as const,
+      tipoCaixaAvulsa: 'cto-predial' as const,
+      quantidadeCaixasAvulsas: 2,
+    }
+
+    expect(validarSolicitacao(dados).erros).toContain(
+      'Selecione o splitter 1x8 ou 1x16 para a CTO de prédio avulsa.',
+    )
+    expect(validarSolicitacao({ ...dados, splittagemCtoPredialAvulsa: '1x8' }).erros).toEqual([])
+  })
+
+  it('permite solicitar apenas um dos adesivos para CTO de poste', () => {
+    const dados = {
+      ...criarDadosIniciais(),
+      equipeRetirada: 'ATELECOM',
+      os: 'OS-12345',
+      protocolo: 'PROTO-67890',
+      tipoServico: 'avulsa' as const,
+      tipoCaixaAvulsa: 'adesivos-cto-poste' as const,
+    }
+
+    expect(validarSolicitacao(dados).erros).toContain(
+      'Informe a quantidade de pelo menos um adesivo interno ou externo para CTO de poste.',
+    )
+    expect(validarSolicitacao({ ...dados, quantidadeAdesivoExternoCtoPoste: 4 }).erros).toEqual([])
   })
 })

@@ -32,6 +32,10 @@ const registros: RegistroPublico[] = [
   ['2029', 'SPLITTER BOX PLC 1X16 APC', 'und'],
   ['1760', 'ADESIVOS SPLITTER BOX - 10X10', 'und'],
   ['1066', 'CTO', 'und'],
+  ['1756', 'ADESIVO PARA CTO - INTERNO', 'und'],
+  ['1682', 'ADESIVO PARA CTO - EXTERNO SEM IDENTIFICACAO', 'und'],
+  ['1575', 'SPLITTER 1x8 CONECTORIZADO', 'und'],
+  ['713', 'SPLITTER PLC 1x16 CONECTORIZADO SC/APC VERDE', 'und'],
   ['1758', 'SPLITTER 1X8 DESCONECTORIZADO', 'und'],
   ['204', 'SPLITTER 1X16 DESCONECTORIZADO', 'und'],
 ]

@@ -25,7 +25,10 @@ export const criarDadosIniciais = (): DadosSolicitacao => {
     quantidadeCaixas: 1,
     tipoCaixaAvulsa: '',
     quantidadeCaixasAvulsas: 1,
+    splittagemCtoPredialAvulsa: '',
     quantidadeSplitter1x8: 0,
     quantidadeSplitter1x16: 0,
+    quantidadeAdesivoInternoCtoPoste: 0,
+    quantidadeAdesivoExternoCtoPoste: 0,
   }
 }

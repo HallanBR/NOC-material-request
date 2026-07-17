@@ -92,4 +92,72 @@ describe('regras de materiais', () => {
       expect(itens.find((item) => item.codigo === '204')).toBeUndefined()
     }
   })
+
+  it('aplica a lógica predial também à CTO de prédio avulsa', () => {
+    const dados = criarDadosIniciais()
+    dados.tipoServico = 'avulsa'
+    dados.tipoCaixaAvulsa = 'cto-predial'
+    dados.quantidadeCaixasAvulsas = 2
+    dados.splittagemCtoPredialAvulsa = '1x16'
+
+    const itens = calcularMateriaisAutomaticos(dados)
+
+    expect(itens.find((item) => item.codigo === '2029')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '1760')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '1066')).toBeUndefined()
+  })
+
+  it('inclui caixa, splitters e os dois adesivos para CTO de poste avulsa', () => {
+    const dados = criarDadosIniciais()
+    dados.tipoServico = 'avulsa'
+    dados.tipoCaixaAvulsa = 'cto-poste'
+    dados.quantidadeCaixasAvulsas = 3
+    dados.quantidadeSplitter1x8 = 2
+    dados.quantidadeSplitter1x16 = 1
+
+    const itens = calcularMateriaisAutomaticos(dados)
+
+    expect(itens.find((item) => item.codigo === '1066')?.quantidade).toBe(3)
+    expect(itens.find((item) => item.codigo === '1575')?.quantidade).toBe(2)
+    expect(itens.find((item) => item.codigo === '713')?.quantidade).toBe(1)
+    expect(itens.find((item) => item.codigo === '1756')?.quantidade).toBe(3)
+    expect(itens.find((item) => item.codigo === '1682')?.quantidade).toBe(3)
+  })
+
+  it('permite solicitar somente um tipo de adesivo para CTO de poste', () => {
+    const dados = criarDadosIniciais()
+    dados.tipoServico = 'avulsa'
+    dados.tipoCaixaAvulsa = 'adesivos-cto-poste'
+    dados.quantidadeAdesivoExternoCtoPoste = 5
+
+    const itens = calcularMateriaisAutomaticos(dados)
+
+    expect(itens.find((item) => item.codigo === '1682')?.quantidade).toBe(5)
+    expect(itens.find((item) => item.codigo === '1756')).toBeUndefined()
+    expect(itens.find((item) => item.codigo === '1066')).toBeUndefined()
+  })
+
+  it('inclui adesivos na CTO de poste completa e usa splitter conectorizado na troca', () => {
+    const caixaCompleta = criarDadosIniciais()
+    caixaCompleta.tipoServico = 'caixa-danificada'
+    caixaCompleta.tipoCaixa = 'cto-poste'
+    caixaCompleta.trocarCaixaCompleta = true
+    caixaCompleta.quantidadeCaixas = 2
+
+    const itensCaixaCompleta = calcularMateriaisAutomaticos(caixaCompleta)
+    expect(itensCaixaCompleta.find((item) => item.codigo === '1066')?.quantidade).toBe(2)
+    expect(itensCaixaCompleta.find((item) => item.codigo === '1756')?.quantidade).toBe(2)
+    expect(itensCaixaCompleta.find((item) => item.codigo === '1682')?.quantidade).toBe(2)
+
+    const somenteSplitter = criarDadosIniciais()
+    somenteSplitter.tipoServico = 'caixa-danificada'
+    somenteSplitter.tipoCaixa = 'cto-poste'
+    somenteSplitter.trocarCaixaCompleta = false
+    somenteSplitter.trocarSomenteSplitter = true
+    somenteSplitter.splittagem = '1x8'
+
+    const itensSomenteSplitter = calcularMateriaisAutomaticos(somenteSplitter)
+    expect(itensSomenteSplitter.find((item) => item.codigo === '1575')?.quantidade).toBe(1)
+    expect(itensSomenteSplitter.find((item) => item.codigo === '1758')).toBeUndefined()
+  })
 })

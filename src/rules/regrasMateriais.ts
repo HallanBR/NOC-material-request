@@ -154,6 +154,28 @@ export const regrasMateriais: RegraMaterial[] = [
     },
   },
   {
+    id: 'RG-CTO-POSTE-ADESIVO-INTERNO',
+    nome: 'Adesivo interno da CTO de poste completa',
+    descricao: 'Inclui um adesivo interno para cada CTO de poste completa.',
+    condicao: (dados) =>
+      dados.tipoServico === 'caixa-danificada' && dados.tipoCaixa === 'cto-poste' &&
+      dados.trocarCaixaCompleta === true && dados.quantidadeCaixas > 0,
+    acao: (dados) => criarItem(
+      materialPorCodigo('1756'), dados.quantidadeCaixas, 'RG-CTO-POSTE-ADESIVO-INTERNO',
+    ),
+  },
+  {
+    id: 'RG-CTO-POSTE-ADESIVO-EXTERNO',
+    nome: 'Adesivo externo da CTO de poste completa',
+    descricao: 'Inclui um adesivo externo para cada CTO de poste completa.',
+    condicao: (dados) =>
+      dados.tipoServico === 'caixa-danificada' && dados.tipoCaixa === 'cto-poste' &&
+      dados.trocarCaixaCompleta === true && dados.quantidadeCaixas > 0,
+    acao: (dados) => criarItem(
+      materialPorCodigo('1682'), dados.quantidadeCaixas, 'RG-CTO-POSTE-ADESIVO-EXTERNO',
+    ),
+  },
+  {
     id: 'RG-SPLITTER',
     nome: 'Troca apenas do splitter',
     descricao: 'Inclui o splitter de 1x8 ou 1x16 informado para a caixa danificada.',
@@ -162,15 +184,21 @@ export const regrasMateriais: RegraMaterial[] = [
       (dados.tipoCaixa === 'cto-poste' || dados.tipoCaixa === 'ceo') &&
       dados.trocarCaixaCompleta === false &&
       dados.trocarSomenteSplitter === true && dados.splittagem !== '' && dados.quantidadeCaixas > 0,
-    acao: (dados) => criarItem(
-      materialPorCodigo(dados.splittagem === '1x8' ? '1758' : '204'), dados.quantidadeCaixas, 'RG-SPLITTER',
-    ),
+    acao: (dados) => {
+      const codigo = dados.tipoCaixa === 'cto-poste'
+        ? dados.splittagem === '1x8' ? '1575' : '713'
+        : dados.splittagem === '1x8' ? '1758' : '204'
+      return criarItem(materialPorCodigo(codigo), dados.quantidadeCaixas, 'RG-SPLITTER')
+    },
   },
   {
     id: 'RG-AVULSA-CAIXA',
     nome: 'Caixa em solicitação avulsa',
-    descricao: 'Inclui CEO ou CTO de acordo com a escolha do usuário.',
-    condicao: (dados) => dados.tipoServico === 'avulsa' && dados.tipoCaixaAvulsa !== '' && dados.quantidadeCaixasAvulsas > 0,
+    descricao: 'Inclui CEO ou CTO de poste de acordo com a escolha do usuário.',
+    condicao: (dados) =>
+      dados.tipoServico === 'avulsa' &&
+      (dados.tipoCaixaAvulsa === 'ceo' || dados.tipoCaixaAvulsa === 'cto-poste') &&
+      dados.quantidadeCaixasAvulsas > 0,
     acao: (dados) => criarItem(
       materialPorCodigo(dados.tipoCaixaAvulsa === 'ceo' ? '103' : '1066'),
       dados.quantidadeCaixasAvulsas,
@@ -178,18 +206,90 @@ export const regrasMateriais: RegraMaterial[] = [
     ),
   },
   {
+    id: 'RG-AVULSA-CTO-PREDIAL-SPLITTER-BOX',
+    nome: 'Splitter box de CTO de prédio avulsa',
+    descricao: 'Inclui a splitter box escolhida na mesma quantidade das CTOs de prédio.',
+    condicao: (dados) =>
+      dados.tipoServico === 'avulsa' && dados.tipoCaixaAvulsa === 'cto-predial' &&
+      dados.splittagemCtoPredialAvulsa !== '' && dados.quantidadeCaixasAvulsas > 0,
+    acao: (dados) => criarItem(
+      materialPorCodigo(dados.splittagemCtoPredialAvulsa === '1x8' ? '1643' : '2029'),
+      dados.quantidadeCaixasAvulsas,
+      'RG-AVULSA-CTO-PREDIAL-SPLITTER-BOX',
+    ),
+  },
+  {
+    id: 'RG-AVULSA-CTO-PREDIAL-ADESIVO',
+    nome: 'Adesivo de CTO de prédio avulsa',
+    descricao: 'Inclui um adesivo para cada CTO de prédio solicitada.',
+    condicao: (dados) =>
+      dados.tipoServico === 'avulsa' && dados.tipoCaixaAvulsa === 'cto-predial' &&
+      dados.quantidadeCaixasAvulsas > 0,
+    acao: (dados) => criarItem(
+      materialPorCodigo('1760'), dados.quantidadeCaixasAvulsas, 'RG-AVULSA-CTO-PREDIAL-ADESIVO',
+    ),
+  },
+  {
+    id: 'RG-AVULSA-CTO-POSTE-ADESIVO-INTERNO',
+    nome: 'Adesivo interno de CTO de poste',
+    descricao: 'Inclui um adesivo interno para cada CTO de poste solicitada.',
+    condicao: (dados) =>
+      dados.tipoServico === 'avulsa' && dados.tipoCaixaAvulsa === 'cto-poste' &&
+      dados.quantidadeCaixasAvulsas > 0,
+    acao: (dados) => criarItem(
+      materialPorCodigo('1756'), dados.quantidadeCaixasAvulsas, 'RG-AVULSA-CTO-POSTE-ADESIVO-INTERNO',
+    ),
+  },
+  {
+    id: 'RG-AVULSA-CTO-POSTE-ADESIVO-EXTERNO',
+    nome: 'Adesivo externo de CTO de poste',
+    descricao: 'Inclui um adesivo externo para cada CTO de poste solicitada.',
+    condicao: (dados) =>
+      dados.tipoServico === 'avulsa' && dados.tipoCaixaAvulsa === 'cto-poste' &&
+      dados.quantidadeCaixasAvulsas > 0,
+    acao: (dados) => criarItem(
+      materialPorCodigo('1682'), dados.quantidadeCaixasAvulsas, 'RG-AVULSA-CTO-POSTE-ADESIVO-EXTERNO',
+    ),
+  },
+  {
     id: 'RG-AVULSA-SPLITTER-1X8',
-    nome: 'Splitter 1x8 em solicitação avulsa',
-    descricao: 'Inclui a quantidade indicada de splitters 1x8 para CTO.',
-    condicao: (dados) => dados.tipoServico === 'avulsa' && dados.tipoCaixaAvulsa === 'cto' && dados.quantidadeSplitter1x8 > 0,
-    acao: (dados) => criarItem(materialPorCodigo('1758'), dados.quantidadeSplitter1x8, 'RG-AVULSA-SPLITTER-1X8'),
+    nome: 'Splitter 1x8 de CTO de poste avulsa',
+    descricao: 'Inclui a quantidade indicada de splitters conectorizados 1x8.',
+    condicao: (dados) =>
+      dados.tipoServico === 'avulsa' && dados.tipoCaixaAvulsa === 'cto-poste' &&
+      dados.quantidadeSplitter1x8 > 0,
+    acao: (dados) => criarItem(materialPorCodigo('1575'), dados.quantidadeSplitter1x8, 'RG-AVULSA-SPLITTER-1X8'),
   },
   {
     id: 'RG-AVULSA-SPLITTER-1X16',
-    nome: 'Splitter 1x16 em solicitação avulsa',
-    descricao: 'Inclui a quantidade indicada de splitters 1x16 para CTO.',
-    condicao: (dados) => dados.tipoServico === 'avulsa' && dados.tipoCaixaAvulsa === 'cto' && dados.quantidadeSplitter1x16 > 0,
-    acao: (dados) => criarItem(materialPorCodigo('204'), dados.quantidadeSplitter1x16, 'RG-AVULSA-SPLITTER-1X16'),
+    nome: 'Splitter 1x16 de CTO de poste avulsa',
+    descricao: 'Inclui a quantidade indicada de splitters conectorizados 1x16.',
+    condicao: (dados) =>
+      dados.tipoServico === 'avulsa' && dados.tipoCaixaAvulsa === 'cto-poste' &&
+      dados.quantidadeSplitter1x16 > 0,
+    acao: (dados) => criarItem(materialPorCodigo('713'), dados.quantidadeSplitter1x16, 'RG-AVULSA-SPLITTER-1X16'),
+  },
+  {
+    id: 'RG-AVULSA-ADESIVO-INTERNO',
+    nome: 'Adesivo interno avulso para CTO de poste',
+    descricao: 'Inclui somente a quantidade de adesivos internos informada.',
+    condicao: (dados) =>
+      dados.tipoServico === 'avulsa' && dados.tipoCaixaAvulsa === 'adesivos-cto-poste' &&
+      dados.quantidadeAdesivoInternoCtoPoste > 0,
+    acao: (dados) => criarItem(
+      materialPorCodigo('1756'), dados.quantidadeAdesivoInternoCtoPoste, 'RG-AVULSA-ADESIVO-INTERNO',
+    ),
+  },
+  {
+    id: 'RG-AVULSA-ADESIVO-EXTERNO',
+    nome: 'Adesivo externo avulso para CTO de poste',
+    descricao: 'Inclui somente a quantidade de adesivos externos informada.',
+    condicao: (dados) =>
+      dados.tipoServico === 'avulsa' && dados.tipoCaixaAvulsa === 'adesivos-cto-poste' &&
+      dados.quantidadeAdesivoExternoCtoPoste > 0,
+    acao: (dados) => criarItem(
+      materialPorCodigo('1682'), dados.quantidadeAdesivoExternoCtoPoste, 'RG-AVULSA-ADESIVO-EXTERNO',
+    ),
   },
 ]
 

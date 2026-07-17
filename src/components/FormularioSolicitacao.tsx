@@ -44,6 +44,22 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
     })
   }
 
+  const selecionarTipoCaixaAvulsa = (tipoCaixaAvulsa: DadosSolicitacao['tipoCaixaAvulsa']) => {
+    aoAlterar({
+      tipoCaixaAvulsa,
+      splittagemCtoPredialAvulsa:
+        tipoCaixaAvulsa === 'cto-predial' ? dados.splittagemCtoPredialAvulsa : '',
+      quantidadeSplitter1x8:
+        tipoCaixaAvulsa === 'cto-poste' ? dados.quantidadeSplitter1x8 : 0,
+      quantidadeSplitter1x16:
+        tipoCaixaAvulsa === 'cto-poste' ? dados.quantidadeSplitter1x16 : 0,
+      quantidadeAdesivoInternoCtoPoste:
+        tipoCaixaAvulsa === 'adesivos-cto-poste' ? dados.quantidadeAdesivoInternoCtoPoste : 0,
+      quantidadeAdesivoExternoCtoPoste:
+        tipoCaixaAvulsa === 'adesivos-cto-poste' ? dados.quantidadeAdesivoExternoCtoPoste : 0,
+    })
+  }
+
   const alternarKit = (capacidade: CapacidadeFibra) =>
     aoAlterar({
       kits: dados.kits.includes(capacidade)
@@ -217,26 +233,62 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
 
       {dados.tipoServico === 'avulsa' && (
         <div className="bloco-formulario bloco-dinamico">
-          <h3>Caixa para solicitação avulsa</h3>
+          <h3>Materiais para solicitação avulsa</h3>
           <div className="grade-formulario grade-curta">
             <label>
-              <span>Tipo de caixa *</span>
-              <select value={dados.tipoCaixaAvulsa} onChange={(event) => aoAlterar({ tipoCaixaAvulsa: event.target.value as DadosSolicitacao['tipoCaixaAvulsa'] })}>
-                <option value="">Selecione</option><option value="ceo">CEO</option><option value="cto">CTO</option>
+              <span>Tipo de solicitação *</span>
+              <select value={dados.tipoCaixaAvulsa} onChange={(event) => selecionarTipoCaixaAvulsa(event.target.value as DadosSolicitacao['tipoCaixaAvulsa'])}>
+                <option value="">Selecione</option>
+                <option value="ceo">CEO</option>
+                <option value="cto-predial">CTO de prédio</option>
+                <option value="cto-poste">CTO de poste</option>
+                <option value="adesivos-cto-poste">Apenas adesivos para CTO de poste</option>
               </select>
             </label>
-            <label>
-              <span>Quantidade de caixas</span>
-              <input min="1" type="number" value={dados.quantidadeCaixasAvulsas || ''} onChange={(event) => aoAlterar({ quantidadeCaixasAvulsas: Number(event.target.value) })} />
-            </label>
+            {dados.tipoCaixaAvulsa && dados.tipoCaixaAvulsa !== 'adesivos-cto-poste' && (
+              <label>
+                <span>Quantidade de caixas</span>
+                <input min="1" type="number" value={dados.quantidadeCaixasAvulsas || ''} onChange={(event) => aoAlterar({ quantidadeCaixasAvulsas: Number(event.target.value) })} />
+              </label>
+            )}
           </div>
-          {dados.tipoCaixaAvulsa === 'cto' && (
+
+          {dados.tipoCaixaAvulsa === 'cto-predial' && (
             <div className="subsecao-formulario">
-              <h3>Splitters da CTO</h3>
-              <p className="texto-ajuda">Informe a quantidade de cada splittagem; é permitido solicitar vários splitters iguais.</p>
+              <h3>Splitter da CTO de prédio</h3>
+              <p className="texto-ajuda">A splitter box e o adesivo serão adicionados na mesma quantidade das CTOs de prédio.</p>
+              <label className="campo-numerico-condicional">
+                <span>Splittagem *</span>
+                <select
+                  value={dados.splittagemCtoPredialAvulsa}
+                  onChange={(event) => aoAlterar({ splittagemCtoPredialAvulsa: event.target.value as DadosSolicitacao['splittagemCtoPredialAvulsa'] })}
+                >
+                  <option value="">Selecione</option>
+                  <option value="1x8">1643 - SPLITTER BOX PLC 1X8 APC</option>
+                  <option value="1x16">2029 - SPLITTER BOX PLC 1X16 APC</option>
+                </select>
+              </label>
+            </div>
+          )}
+
+          {dados.tipoCaixaAvulsa === 'cto-poste' && (
+            <div className="subsecao-formulario">
+              <h3>Splitters da CTO de poste</h3>
+              <p className="texto-ajuda">Os adesivos interno e externo serão adicionados automaticamente, um de cada por CTO de poste.</p>
               <div className="grade-formulario grade-curta">
-                <label><span>Splitter 1x8</span><input min="0" type="number" value={dados.quantidadeSplitter1x8 || ''} onChange={(event) => aoAlterar({ quantidadeSplitter1x8: Number(event.target.value) })} /></label>
-                <label><span>Splitter 1x16</span><input min="0" type="number" value={dados.quantidadeSplitter1x16 || ''} onChange={(event) => aoAlterar({ quantidadeSplitter1x16: Number(event.target.value) })} /></label>
+                <label><span>1575 - Splitter 1x8 conectorizado</span><input min="0" type="number" value={dados.quantidadeSplitter1x8 || ''} onChange={(event) => aoAlterar({ quantidadeSplitter1x8: Number(event.target.value) })} /></label>
+                <label><span>713 - Splitter PLC 1x16 conectorizado</span><input min="0" type="number" value={dados.quantidadeSplitter1x16 || ''} onChange={(event) => aoAlterar({ quantidadeSplitter1x16: Number(event.target.value) })} /></label>
+              </div>
+            </div>
+          )}
+
+          {dados.tipoCaixaAvulsa === 'adesivos-cto-poste' && (
+            <div className="subsecao-formulario">
+              <h3>Adesivos avulsos para CTO de poste</h3>
+              <p className="texto-ajuda">Informe somente as quantidades necessárias. É permitido solicitar apenas um dos tipos.</p>
+              <div className="grade-formulario grade-curta">
+                <label><span>1756 - Adesivo interno</span><input min="0" type="number" value={dados.quantidadeAdesivoInternoCtoPoste || ''} onChange={(event) => aoAlterar({ quantidadeAdesivoInternoCtoPoste: Number(event.target.value) })} /></label>
+                <label><span>1682 - Adesivo externo</span><input min="0" type="number" value={dados.quantidadeAdesivoExternoCtoPoste || ''} onChange={(event) => aoAlterar({ quantidadeAdesivoExternoCtoPoste: Number(event.target.value) })} /></label>
               </div>
             </div>
           )}

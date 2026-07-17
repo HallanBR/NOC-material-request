@@ -64,14 +64,25 @@ export const validarSolicitacao = (dados: DadosSolicitacao): ResultadoValidacao 
   }
 
   if (dados.tipoServico === 'avulsa') {
-    if (!dados.tipoCaixaAvulsa) erros.push('Selecione CEO ou CTO para a solicitação avulsa.')
-    if (dados.quantidadeCaixasAvulsas <= 0) erros.push('A quantidade de caixas deve ser maior que zero.')
+    if (!dados.tipoCaixaAvulsa) erros.push('Selecione o tipo da solicitação avulsa.')
+
+    if (dados.tipoCaixaAvulsa && dados.tipoCaixaAvulsa !== 'adesivos-cto-poste' && dados.quantidadeCaixasAvulsas <= 0) {
+      erros.push('A quantidade de caixas deve ser maior que zero.')
+    }
+    if (dados.tipoCaixaAvulsa === 'cto-predial' && !dados.splittagemCtoPredialAvulsa) {
+      erros.push('Selecione o splitter 1x8 ou 1x16 para a CTO de prédio avulsa.')
+    }
     if (
-      dados.tipoCaixaAvulsa === 'cto' &&
-      dados.quantidadeSplitter1x8 <= 0 &&
-      dados.quantidadeSplitter1x16 <= 0
+      dados.tipoCaixaAvulsa === 'cto-poste' &&
+      dados.quantidadeSplitter1x8 <= 0 && dados.quantidadeSplitter1x16 <= 0
     ) {
-      erros.push('Informe a quantidade de pelo menos um splitter para a CTO.')
+      erros.push('Informe a quantidade de pelo menos um splitter para a CTO de poste.')
+    }
+    if (
+      dados.tipoCaixaAvulsa === 'adesivos-cto-poste' &&
+      dados.quantidadeAdesivoInternoCtoPoste <= 0 && dados.quantidadeAdesivoExternoCtoPoste <= 0
+    ) {
+      erros.push('Informe a quantidade de pelo menos um adesivo interno ou externo para CTO de poste.')
     }
   }
 
