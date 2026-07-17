@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Alertas } from './components/Alertas'
 import { FormularioSolicitacao } from './components/FormularioSolicitacao'
+import { FluxogramaProjeto } from './components/FluxogramaProjeto'
 import { ListaMateriais } from './components/ListaMateriais'
 import { PreviaEmail } from './components/PreviaEmail'
 import { criarDadosIniciais } from './data/configuracao'
@@ -18,6 +19,7 @@ function App() {
   const [dados, setDados] = useState<DadosSolicitacao>(() => rascunhoInicial?.dados ?? criarDadosIniciais())
   const [tentouGerar, setTentouGerar] = useState(false)
   const [mostrarPrevia, setMostrarPrevia] = useState(false)
+  const [mostrarFluxograma, setMostrarFluxograma] = useState(false)
   const [mensagem, setMensagem] = useState('')
 
   const itensAutomaticos = useMemo(() => calcularMateriaisAutomaticos(dados), [dados])
@@ -69,8 +71,12 @@ function App() {
           <h1>Solicitação de materiais</h1>
           <p>Informe a demanda e gere automaticamente a solicitação para expedição.</p>
         </div>
-        <div className="status-rascunho">Rascunho salvo neste navegador</div>
+        <button className="botao-fluxograma" onClick={() => setMostrarFluxograma(true)} type="button">
+          Ver fluxograma
+        </button>
       </header>
+
+      {mostrarFluxograma && <FluxogramaProjeto aoFechar={() => setMostrarFluxograma(false)} />}
 
       <main className="conteudo-principal">
         {mensagem && <div className="mensagem-sucesso" role="status">{mensagem}</div>}

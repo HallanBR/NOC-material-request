@@ -12,6 +12,7 @@ Aplicação web estática para montar solicitações de materiais do NOC, aplica
 - permite informar múltiplos trechos de cabo, inclusive com a mesma capacidade;
 - calcula ferragens por postes retos, curvas, CTOs e raquetes;
 - gera e-mail e arquivo TXT com código, nome e quantidade dos materiais;
+- disponibiliza um fluxograma interativo no cabeçalho para explicar o fluxo da solicitação;
 - mantém o rascunho somente no `localStorage` do navegador.
 
 ## Execução local
