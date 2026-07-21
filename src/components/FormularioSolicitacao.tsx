@@ -155,6 +155,7 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
                           value={dados.quantidadeAlcasPorKit[capacidade] || ''}
                           onChange={(event) => alterarQuantidadeAlcasKit(capacidade, Number(event.target.value))}
                         />
+                        <small className="aviso-recomendacao-alcas">Recomendação: considere 2 alças para cada poste.</small>
                       </label>
                     )}
                   </div>

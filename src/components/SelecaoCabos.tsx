@@ -71,6 +71,7 @@ export function SelecaoCabos({ dados, aoAlterar, titulo = 'Cabos a solicitar' }:
                 value={cabo.quantidadeAlcasPlaquetas || ''}
                 onChange={(event) => alterarCabo(cabo.id, { quantidadeAlcasPlaquetas: Number(event.target.value) })}
               />
+              <small className="aviso-recomendacao-alcas">Recomendação: considere 2 alças para cada poste.</small>
             </label>
             <button
               className="botao-link perigo"
