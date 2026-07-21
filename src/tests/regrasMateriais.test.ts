@@ -93,7 +93,7 @@ describe('regras de materiais', () => {
     expect(itens.find((item) => item.codigo === '688')?.quantidade).toBe(1)
   })
 
-  it('aplica um parafuso, um olhal e dois anéis por poste com curva', () => {
+  it('aplica dois parafusos, um olhal e dois anéis por poste com curva', () => {
     const dados = criarDadosIniciais()
     dados.tipoServico = 'equipagem-poste'
     dados.quantidadePostes = 1
@@ -101,7 +101,7 @@ describe('regras de materiais', () => {
 
     const itens = calcularMateriaisAutomaticos(dados)
 
-    expect(itens.find((item) => item.codigo === '206')?.quantidade).toBe(1)
+    expect(itens.find((item) => item.codigo === '206')?.quantidade).toBe(2)
     expect(itens.find((item) => item.codigo === '424')?.quantidade).toBe(1)
     expect(itens.find((item) => item.codigo === '802')?.quantidade).toBe(2)
   })
@@ -127,8 +127,27 @@ describe('regras de materiais', () => {
     expect(quantidades('1763')).toEqual([3, 2])
     expect(quantidades('67')).toEqual([1])
     expect(quantidades('1720')).toEqual([6])
-    expect(quantidades('184')).toEqual([5, 4, 3, 2, 1, 6])
+    expect(quantidades('184')).toEqual([21])
     expect(itens.filter((item) => ['1057', '1763', '67', '1720'].includes(item.codigo ?? '')).every((item) => item.unidade === 'und')).toBe(true)
+  })
+
+  it('agrupa plaquetas iguais sem agrupar alças e cabos', () => {
+    const dados = criarDadosIniciais()
+    dados.tipoServico = 'equipagem-poste'
+    dados.quantidadePostes = 3
+    dados.cabos = [
+      { id: 'trecho-a', capacidade: 6, metragem: 100, quantidadeAlcasPlaquetas: 8 },
+      { id: 'trecho-b', capacidade: 6, metragem: 200, quantidadeAlcasPlaquetas: 2 },
+      { id: 'trecho-c', capacidade: 12, metragem: 300, quantidadeAlcasPlaquetas: 2 },
+    ]
+
+    const itens = calcularMateriaisAutomaticos(dados)
+
+    expect(itens.filter((item) => item.codigo === '184')).toHaveLength(1)
+    expect(itens.find((item) => item.codigo === '184')?.quantidade).toBe(12)
+    expect(itens.filter((item) => item.codigo === '1057').map((item) => item.quantidade)).toEqual([8, 2, 2])
+    expect(itens.filter((item) => item.codigo === '1698').map((item) => item.quantidade)).toEqual([100, 200])
+    expect(itens.filter((item) => item.codigo === '50').map((item) => item.quantidade)).toEqual([300])
   })
 
   it('inclui a splitter box escolhida e um adesivo por CTO de prédio', () => {
