@@ -15,13 +15,20 @@ export const validarSolicitacao = (dados: DadosSolicitacao): ResultadoValidacao 
     if (dados.modoRompimento === 'kit' && dados.kits.length === 0) {
       erros.push('Selecione pelo menos um kit para o rompimento.')
     }
+    if (dados.modoRompimento === 'kit') {
+      for (const capacidade of dados.kits) {
+        const quantidade = dados.quantidadeAlcasPorKit[capacidade]
+        if (!Number.isFinite(quantidade) || quantidade < 0) {
+          erros.push(`Informe uma quantidade válida de alças para o kit de ${capacidade} fibras.`)
+        }
+      }
+    }
     if (dados.modoRompimento === 'cabo' && dados.cabos.length === 0) {
       erros.push('Adicione pelo menos um cabo para o rompimento.')
     }
   }
 
   const usaPostes =
-    dados.tipoServico === 'troca-poste' ||
     dados.tipoServico === 'equipagem-poste' ||
     (dados.tipoServico === 'rompimento' && dados.modoRompimento === 'cabo')
 

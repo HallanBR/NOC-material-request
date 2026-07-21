@@ -52,6 +52,20 @@ describe('regras de materiais', () => {
     expect(itens.find((item) => item.codigo === '2294')).toMatchObject({ quantidade: 1, unidade: 'kit', pendenteCadastro: false })
   })
 
+  it('inclui a quantidade escolhida da alça correspondente a cada kit', () => {
+    const dados = criarDadosIniciais()
+    dados.modoRompimento = 'kit'
+    dados.kits = [24, 36, 72, 144]
+    dados.quantidadeAlcasPorKit = { 24: 2, 36: 3, 72: 4, 144: 5 }
+
+    const itens = calcularMateriaisAutomaticos(dados)
+
+    expect(itens.find((item) => item.codigo === '1763')?.quantidade).toBe(5)
+    expect(itens.find((item) => item.codigo === '67')?.quantidade).toBe(4)
+    expect(itens.find((item) => item.codigo === '1720')?.quantidade).toBe(5)
+    expect(itens.find((item) => item.codigo === '184')).toBeUndefined()
+  })
+
   it('calcula a ferragem base pelo total de postes a equipar', () => {
     const dados = criarDadosIniciais()
     dados.tipoServico = 'equipagem-poste'

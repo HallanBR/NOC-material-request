@@ -19,7 +19,6 @@ export type Material = {
 
 export type TipoServico =
   | 'rompimento'
-  | 'troca-poste'
   | 'equipagem-poste'
   | 'caixa-danificada'
   | 'avulsa'
@@ -47,6 +46,7 @@ export type DadosSolicitacao = {
   tipoServico: TipoServico
   modoRompimento: ModoRompimento
   kits: CapacidadeKit[]
+  quantidadeAlcasPorKit: Record<CapacidadeKit, number>
   cabos: CaboSolicitado[]
   quantidadePostes: number
   quantidadeRaquetes: number

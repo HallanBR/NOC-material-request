@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { criarDadosIniciais } from '../data/configuracao'
 import { validarSolicitacao } from '../services/validacoes'
+import type { DadosSolicitacao } from '../types'
 
 const dadosValidos = () => ({
   ...criarDadosIniciais(),
@@ -56,6 +57,20 @@ describe('validação da solicitação', () => {
 
   it('permite gerar um rompimento com os dados mínimos', () => {
     expect(validarSolicitacao(dadosValidos()).erros).toEqual([])
+  })
+
+  it('rejeita quantidade negativa de alças para um kit selecionado', () => {
+    const dados = {
+      ...dadosValidos(),
+      modoRompimento: 'kit' as const,
+      cabos: [],
+      kits: [24] as DadosSolicitacao['kits'],
+      quantidadeAlcasPorKit: { 24: -1, 36: 0, 72: 0, 144: 0 },
+    }
+
+    expect(validarSolicitacao(dados)).toMatchObject({
+      erros: expect.arrayContaining(['Informe uma quantidade válida de alças para o kit de 24 fibras.']),
+    })
   })
 
   it('exige a configuração da CTO de poste solicitada de forma avulsa', () => {

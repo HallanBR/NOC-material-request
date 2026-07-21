@@ -87,6 +87,12 @@ input:focus, select:focus, textarea:focus { border-color: #a40d31; box-shadow: 0
 .destaque-pendente { color: #925509; }
 .opcoes-inline { display: flex; flex-wrap: wrap; gap: .7rem 1rem; }
 .opcoes-inline label, .escolha-sim-nao label { align-items: center; display: flex; font-size: .88rem; gap: .35rem; }
+.lista-kits { display: grid; gap: .65rem; max-width: 580px; }
+.linha-kit { align-items: center; background: #fff; border: 1px solid #e2e7ea; border-radius: 8px; display: grid; gap: .8rem; grid-template-columns: 1fr 1.4fr; padding: .75rem; }
+.checkbox-kit { align-items: center; display: flex; font-size: .88rem; font-weight: 700; gap: .4rem; }
+.checkbox-kit input { accent-color: #9d0b2c; min-height: auto; width: auto; }
+.quantidade-alcas-kit { display: grid; gap: .35rem; }
+.quantidade-alcas-kit span { color: #465465; font-size: .82rem; font-weight: 700; }
 
 .lista-cabos { display: grid; gap: .55rem; }
 .cabecalho-cabos { align-items: center; display: flex; gap: .55rem; justify-content: space-between; }
@@ -193,7 +199,7 @@ input:focus, select:focus, textarea:focus { border-color: #a40d31; box-shadow: 0
   .conteudo-principal { padding: 1rem .75rem 2rem; }
   .cartao { border-radius: 10px; padding: 1rem; }
   .cabecalho-secao { align-items: flex-start; flex-direction: column; gap: .4rem; }
-  .grade-formulario, .grade-formulario.grade-curta, .grade-material-picker, .lista-capacidades, .grade-postes { grid-template-columns: 1fr; }
+  .grade-formulario, .grade-formulario.grade-curta, .grade-material-picker, .lista-capacidades, .grade-postes, .linha-kit { grid-template-columns: 1fr; }
   .grade-formulario.grade-resumida, .grade-formulario.grade-postes-logica, .linha-cabo { grid-template-columns: 1fr; }
   .campo-largo, .campo-material { grid-column: auto; }
   .linha-material { flex-direction: column; }

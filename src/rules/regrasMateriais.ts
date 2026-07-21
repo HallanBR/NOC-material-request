@@ -34,7 +34,6 @@ export const quantidadePostesRetos = (dados: DadosSolicitacao) =>
   Math.max(0, dados.quantidadePostes - dados.quantidadePostesAngulo - dados.quantidadePostesCto)
 
 const servicoUsaPostes = (dados: DadosSolicitacao) =>
-  dados.tipoServico === 'troca-poste' ||
   dados.tipoServico === 'equipagem-poste' ||
   (dados.tipoServico === 'rompimento' && dados.modoRompimento === 'cabo')
 
@@ -103,8 +102,7 @@ export const regrasMateriais: RegraMaterial[] = [
     descricao: 'Inclui cada linha de cabo com a metragem própria, inclusive capacidades repetidas.',
     condicao: (dados) =>
       dados.cabos.length > 0 &&
-      (dados.tipoServico === 'troca-poste' ||
-        dados.tipoServico === 'equipagem-poste' ||
+      (dados.tipoServico === 'equipagem-poste' ||
         (dados.tipoServico === 'rompimento' && dados.modoRompimento === 'cabo')),
     acao: (dados) => dados.cabos.flatMap((cabo) =>
       criarItem(materialPorCodigo(capacidadeParaCodigo[cabo.capacidade]), cabo.metragem, `RG-CABO-AFETADO-${cabo.id}`, 'm'),
@@ -117,6 +115,22 @@ export const regrasMateriais: RegraMaterial[] = [
     condicao: (dados) => dados.modoRompimento === 'kit' && dados.kits.length > 0,
     acao: (dados) => dados.kits.flatMap((capacidade) =>
       criarItem(materialPorCodigo(capacidadeParaCodigoKit[capacidade]), 1, 'RG-KIT-ROMPIMENTO', 'kit'),
+    ),
+  },
+  {
+    id: 'RG-ALCA-POR-KIT',
+    nome: 'Alças conforme o kit selecionado',
+    descricao: 'Inclui a quantidade informada de alças correspondente à capacidade de cada kit de rompimento.',
+    condicao: (dados) =>
+      dados.modoRompimento === 'kit' &&
+      dados.kits.some((capacidade) => dados.quantidadeAlcasPorKit[capacidade] > 0),
+    acao: (dados) => dados.kits.flatMap((capacidade) =>
+      criarItem(
+        materialPorCodigo(capacidadeParaCodigoAlca[capacidade]),
+        dados.quantidadeAlcasPorKit[capacidade],
+        `RG-ALCA-POR-KIT-${capacidade}`,
+        'und',
+      ),
     ),
   },
   {

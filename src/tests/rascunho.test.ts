@@ -44,6 +44,22 @@ describe('migração do rascunho', () => {
     expect(rascunho?.dados.kits).toEqual([24, 72])
   })
 
+  it('migra a antiga troca de poste para equipagem de poste', () => {
+    localStorage.setItem(CHAVE_RASCUNHO, JSON.stringify({
+      dados: { tipoServico: 'troca-poste' },
+    }))
+
+    expect(carregarRascunho()?.dados.tipoServico).toBe('equipagem-poste')
+  })
+
+  it('adiciona as quantidades de alças por kit aos rascunhos antigos', () => {
+    localStorage.setItem(CHAVE_RASCUNHO, JSON.stringify({
+      dados: { kits: [24, 72] },
+    }))
+
+    expect(carregarRascunho()?.dados.quantidadeAlcasPorKit).toEqual({ 24: 0, 36: 0, 72: 0, 144: 0 })
+  })
+
   it('atribui a recomendação de alças e plaquetas aos cabos de rascunhos antigos', () => {
     localStorage.setItem(CHAVE_RASCUNHO, JSON.stringify({
       dados: {

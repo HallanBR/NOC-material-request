@@ -11,6 +11,7 @@ export const criarDadosIniciais = (): DadosSolicitacao => {
     tipoServico: 'rompimento',
     modoRompimento: '',
     kits: [],
+    quantidadeAlcasPorKit: { 24: 0, 36: 0, 72: 0, 144: 0 },
     cabos: [],
     quantidadePostes: 0,
     quantidadeRaquetes: 0,

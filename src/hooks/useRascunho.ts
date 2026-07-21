@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
 import { criarDadosIniciais } from '../data/configuracao'
-import type { CaboSolicitado, CapacidadeKit, DadosSolicitacao } from '../types'
+import type { CaboSolicitado, CapacidadeKit, DadosSolicitacao, TipoServico } from '../types'
 
 const CHAVE_RASCUNHO = 'noc-solicitacao-materiais-rascunho-v2'
 const capacidadesKitsAtuais: CapacidadeKit[] = [24, 36, 72, 144]
 
 export type Rascunho = { dados: DadosSolicitacao }
-type DadosLegados = Partial<DadosSolicitacao> & {
+type DadosLegados = Omit<Partial<DadosSolicitacao>, 'tipoServico' | 'quantidadeAlcasPorKit'> & {
+  tipoServico?: TipoServico | 'troca-poste'
+  quantidadeAlcasPorKit?: Partial<Record<CapacidadeKit, number>>
   protocoloOs?: string
   quantidadeSplitter1x8?: number
   quantidadeSplitter1x16?: number
@@ -31,15 +33,23 @@ export const carregarRascunho = (): Rascunho | null => {
       quantidadePostesComDrop: _quantidadePostesComDrop,
       ...dadosAtuais
     } = rascunho.dados
+    const dadosIniciais = criarDadosIniciais()
     return {
       dados: {
-        ...criarDadosIniciais(),
+        ...dadosIniciais,
         ...dadosAtuais,
+        tipoServico: dadosAtuais.tipoServico === 'troca-poste'
+          ? 'equipagem-poste'
+          : dadosAtuais.tipoServico ?? dadosIniciais.tipoServico,
         os: dadosAtuais.os ?? protocoloOs ?? '',
         protocolo: dadosAtuais.protocolo ?? '',
         kits: (dadosAtuais.kits ?? []).filter((capacidade): capacidade is CapacidadeKit =>
           capacidadesKitsAtuais.includes(capacidade as CapacidadeKit),
         ),
+        quantidadeAlcasPorKit: {
+          ...dadosIniciais.quantidadeAlcasPorKit,
+          ...dadosAtuais.quantidadeAlcasPorKit,
+        },
         cabos: ((dadosAtuais.cabos ?? []) as CaboLegado[]).map((cabo) => ({
           ...cabo,
           quantidadeAlcasPlaquetas: cabo.quantidadeAlcasPlaquetas ?? 2 * (dadosAtuais.quantidadePostes ?? 0),

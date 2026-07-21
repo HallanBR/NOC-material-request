@@ -38,7 +38,7 @@ export function FluxogramaProjeto({ aoFechar }: FluxogramaProjetoProps) {
           <div className="seta-central-fluxo" aria-hidden="true">↓</div>
           <div className="ramificacoes-fluxo">
             <EtapaFluxo titulo="Rompimento" descricao="Cabo completo ou kit de 24, 36, 72 ou 144 FO." />
-            <EtapaFluxo titulo="Postes" descricao="Troca ou equipagem: cabos, ferragens, curvas, CTOs e raquetes." />
+            <EtapaFluxo titulo="Equipagem de poste" descricao="Cabos, ferragens, curvas, CTOs e raquetes." />
             <EtapaFluxo titulo="Caixa danificada" descricao="CTO de prédio, CTO de poste ou CEO, com materiais correspondentes." />
             <EtapaFluxo titulo="Solicitação avulsa" descricao="CEO, CTOs ou adesivos solicitados individualmente." />
           </div>

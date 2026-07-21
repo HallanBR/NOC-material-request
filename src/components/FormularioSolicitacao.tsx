@@ -12,15 +12,13 @@ const capacidadesKits: CapacidadeKit[] = [24, 36, 72, 144]
 
 const servicos = [
   { valor: 'rompimento', rotulo: 'Rompimento' },
-  { valor: 'troca-poste', rotulo: 'Troca de poste' },
-  { valor: 'equipagem-poste', rotulo: 'Equipagem de novo poste' },
+  { valor: 'equipagem-poste', rotulo: 'Equipagem de poste' },
   { valor: 'caixa-danificada', rotulo: 'Caixa danificada' },
   { valor: 'avulsa', rotulo: 'Solicitação avulsa' },
 ] as const
 
 export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitacaoProps) {
   const mostrarPostes =
-    dados.tipoServico === 'troca-poste' ||
     dados.tipoServico === 'equipagem-poste' ||
     (dados.tipoServico === 'rompimento' && dados.modoRompimento === 'cabo')
   const postesRetos = quantidadePostesRetos(dados)
@@ -29,6 +27,9 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
     aoAlterar({
       modoRompimento,
       kits: modoRompimento === 'kit' ? dados.kits : [],
+      quantidadeAlcasPorKit: modoRompimento === 'kit'
+        ? dados.quantidadeAlcasPorKit
+        : { 24: 0, 36: 0, 72: 0, 144: 0 },
       cabos: modoRompimento === 'cabo' ? dados.cabos : [],
     })
   }
@@ -58,11 +59,21 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
     })
   }
 
-  const alternarKit = (capacidade: CapacidadeKit) =>
+  const alternarKit = (capacidade: CapacidadeKit) => {
+    const selecionado = dados.kits.includes(capacidade)
     aoAlterar({
-      kits: dados.kits.includes(capacidade)
+      kits: selecionado
         ? dados.kits.filter((item) => item !== capacidade)
         : [...dados.kits, capacidade],
+      quantidadeAlcasPorKit: selecionado
+        ? { ...dados.quantidadeAlcasPorKit, [capacidade]: 0 }
+        : dados.quantidadeAlcasPorKit,
+    })
+  }
+
+  const alterarQuantidadeAlcasKit = (capacidade: CapacidadeKit, quantidade: number) =>
+    aoAlterar({
+      quantidadeAlcasPorKit: { ...dados.quantidadeAlcasPorKit, [capacidade]: quantidade },
     })
 
   return (
@@ -127,21 +138,35 @@ export function FormularioSolicitacao({ dados, aoAlterar }: FormularioSolicitaca
           {dados.modoRompimento === 'kit' && (
             <div className="subsecao-formulario">
               <h3>Quais kits?</h3>
-              <div className="opcoes-inline">
+              <div className="lista-kits">
                 {capacidadesKits.map((capacidade) => (
-                  <label key={capacidade}>
-                    <input type="checkbox" checked={dados.kits.includes(capacidade)} onChange={() => alternarKit(capacidade)} />
-                    Kit de {capacidade} fibras
-                  </label>
+                  <div className="linha-kit" key={capacidade}>
+                    <label className="checkbox-kit">
+                      <input type="checkbox" checked={dados.kits.includes(capacidade)} onChange={() => alternarKit(capacidade)} />
+                      Kit de {capacidade} fibras
+                    </label>
+                    {dados.kits.includes(capacidade) && (
+                      <label className="quantidade-alcas-kit">
+                        <span>Quantidade de alças de {capacidade} FO</span>
+                        <input
+                          min="0"
+                          step="1"
+                          type="number"
+                          value={dados.quantidadeAlcasPorKit[capacidade] || ''}
+                          onChange={(event) => alterarQuantidadeAlcasKit(capacidade, Number(event.target.value))}
+                        />
+                      </label>
+                    )}
+                  </div>
                 ))}
               </div>
-              <p className="texto-ajuda">Os kits disponíveis são de 24, 36, 72 e 144 fibras.</p>
+              <p className="texto-ajuda">Selecione os kits e informe a quantidade desejada de alças correspondente a cada capacidade.</p>
             </div>
           )}
         </div>
       )}
 
-      {(dados.tipoServico === 'troca-poste' || dados.tipoServico === 'equipagem-poste') && (
+      {dados.tipoServico === 'equipagem-poste' && (
         <div className="bloco-formulario bloco-dinamico">
           <h3>Cabos do atendimento</h3>
           <SelecaoCabos dados={dados} aoAlterar={aoAlterar} titulo="Cabos a lançar" />
