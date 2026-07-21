@@ -6,12 +6,12 @@ As regras estão centralizadas em `src/rules/regrasMateriais.ts`. Cada uma possu
 | --- | --- | --- |
 | `RG-POSTE-RAQUETE` | Quantidade de raquetes maior que zero. | Multiplica a composição de raquete da aba `Lista de Ferragem`. |
 | `RG-POSTE-RETO` | Há total de postes após descontar curvas e CTOs. | Calcula os postes retos restantes e aplica a ferragem correspondente. |
-| `RG-POSTE-ANGULO` | Há postes com curva. | Aplica um parafuso M2, um olhal e dois anéis guia por poste, além das demais ferragens. |
+| `RG-POSTE-ANGULO` | Há postes com curva. | Aplica dois parafusos M2 (um por suporte BAP), um olhal e dois anéis guia por poste, além das demais ferragens. |
 | `RG-POSTE-CTO` | Há postes com CTO. | Aplica a composição de CTO. |
 | `RG-CABO-AFETADO` | Há uma linha de cabo com metragem maior que zero. | Adiciona cada linha de cabo de 6/12/24/36/72/144 fibras separadamente, mesmo quando a fibra se repete. |
 | `RG-KIT-ROMPIMENTO` | A inclusão de kit foi marcada. | Inclui o kit cadastrado de 24, 36, 72 ou 144 fibras. |
 | `RG-ALCA-POR-CABO` | Há quantidade informada de acessórios em uma linha de cabo. | Inclui a quantidade de alças informada, de acordo com a capacidade escolhida. |
-| `RG-PLAQUETA-POR-CABO` | Há quantidade informada de acessórios em uma linha de cabo. | Inclui a mesma quantidade de plaquetas de identificação amarela. |
+| `RG-PLAQUETA-POR-CABO` | Há quantidade informada de acessórios em uma linha de cabo. | Inclui a mesma quantidade de plaquetas de identificação amarela e soma todas as linhas em um único item. |
 | `RG-CAIXA-COMPLETA` | CTO de poste ou CEO danificada com troca completa confirmada. | Inclui CTO de poste ou CEO conforme o tipo escolhido. |
 | `RG-SPLITTER` | Troca apenas do splitter e splittagem informada. | Inclui splitter 1x8 ou 1x16. |
 | `RG-CTO-POSTE-ADESIVO-INTERNO` / `EXTERNO` | Há troca completa de CTO de poste. | Inclui um adesivo interno e um externo por CTO. |
@@ -31,7 +31,7 @@ As regras estão centralizadas em `src/rules/regrasMateriais.ts`. Cada uma possu
 - Rompimento exige uma escolha exclusiva entre cabo ou kit.
 - Kits de 6 e 12 fibras não são oferecidos. Os kits disponíveis são 24, 36, 72 e 144 fibras.
 - Cada linha de cabo requer metragem maior que zero.
-- A capacidade de cada linha de cabo define o modelo de alça. O usuário informa a quantidade de alças e plaquetas por linha; a interface recomenda duas unidades de cada item por poste. Linhas repetidas permanecem separadas.
+- A capacidade de cada linha de cabo define o modelo de alça. O usuário informa a quantidade de alças e plaquetas por linha; a interface recomenda duas unidades de cada item por poste. As linhas de cabos e alças permanecem separadas, enquanto as plaquetas de código 184 são agrupadas e somadas em um único item.
 - Curvas e CTOs não podem superar o total de postes individualmente. Um mesmo poste pode ter curva e CTO; os materiais comuns respeitam o limite do total de postes e não são duplicados.
 - O total de postes já considera os materiais para equipagem de drops de clientes; não há campo separado para drops.
 - CTO de prédio exige quantidade e escolha entre splitter box 1x8 ou 1x16, sem perguntas de troca completa ou troca apenas do splitter.

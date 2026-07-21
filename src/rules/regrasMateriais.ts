@@ -15,7 +15,7 @@ const composicoes: Record<'raquete' | 'reto' | 'angulo' | 'cto', Composicao[]> =
     { codigo: '219', quantidade: 1 }, { codigo: '802', quantidade: 2 },
   ],
   angulo: [
-    { codigo: '207', quantidade: 1 }, { codigo: '243', quantidade: 2 }, { codigo: '206', quantidade: 1 },
+    { codigo: '207', quantidade: 1 }, { codigo: '243', quantidade: 2 }, { codigo: '206', quantidade: 2 },
     { codigo: '424', quantidade: 1 }, { codigo: '802', quantidade: 2 },
   ],
   cto: [
@@ -344,8 +344,7 @@ export const calcularMateriaisAutomaticos = (dados: DadosSolicitacao): ItemSolic
   for (const item of itens) {
     const preservarLinha =
       item.regras[0].startsWith('RG-CABO-AFETADO-') ||
-      item.regras[0].startsWith('RG-ALCA-POR-CABO-') ||
-      item.regras[0].startsWith('RG-PLAQUETA-POR-CABO-')
+      item.regras[0].startsWith('RG-ALCA-POR-CABO-')
     const chave = preservarLinha ? item.id : item.materialId
     const existente = agrupados.get(chave)
     if (existente) {
