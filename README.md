@@ -19,10 +19,6 @@ Aplicação web estática para montar solicitações de materiais do NOC, aplica
 
 O repositório contém somente o catálogo operacional mínimo necessário às regras da aplicação. Planilhas corporativas, capturas de tela, catálogos importados, scripts de importação e diretórios gerados permanecem locais e estão no `.gitignore`.
 
-## Publicação
-
-Cada envio para a branch `main` executa o workflow em `.github/workflows/deploy-pages.yml`, gera a aplicação e publica no GitHub Pages.
-
 ## Estrutura
 
 ```text
