@@ -15,22 +15,6 @@ Aplicação web estática para montar solicitações de materiais do NOC, aplica
 - disponibiliza um fluxograma interativo no cabeçalho para explicar o fluxo da solicitação;
 - mantém o rascunho somente no `localStorage` do navegador.
 
-## Execução local
-
-Requer Node.js LTS (20 ou superior).
-
-```bash
-npm install
-npm run dev
-```
-
-Para validar a aplicação:
-
-```bash
-npm run test
-npm run build
-```
-
 ## Segurança dos dados
 
 O repositório contém somente o catálogo operacional mínimo necessário às regras da aplicação. Planilhas corporativas, capturas de tela, catálogos importados, scripts de importação e diretórios gerados permanecem locais e estão no `.gitignore`.
